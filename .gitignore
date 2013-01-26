@@ -69,3 +69,9 @@ $RECYCLE.BIN/
 *.lai
 *.la
 *.a
+
+###############
+#Laxman's Additions
+###############
+
+.metadata/
