@@ -1,6 +1,5 @@
-package XboxController;
+package com.BCHS.misc;
 
-import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.parsing.IInputOutput;
