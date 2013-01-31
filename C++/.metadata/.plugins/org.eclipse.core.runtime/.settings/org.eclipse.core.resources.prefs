@@ -1,5 +1,7 @@
-#Fri Jan 25 15:12:03 EST 2013
+#Tue Jan 29 14:58:12 EST 2013
 version=1
 eclipse.preferences.version=1
-pathvariable.WS_ROOT_DIR=C\:/Users/Laxman/Documents/GitHub/FRCTeam-2386-2013/C++
 pathvariable.WIND_HOME=C\:/WindRiver
+pathvariable.WS_ROOT_DIR=C\:/Users/Laxman/Documents/GitHub/FRCTeam-2386-2013/C++
+description.autobuilding=true
+refresh.enabled=true

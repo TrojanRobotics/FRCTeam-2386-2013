@@ -2,6 +2,8 @@
 <section name="Workbench">
 	<section name="WorkbenchPreferenceDialogSettings">
 		<item value="8" key="DIALOG_Y_ORIGIN"/>
-		<item value="374" key="DIALOG_X_ORIGIN"/>
+		<item value="172" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="NewWizardAction">
 	</section>
 </section>

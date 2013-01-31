@@ -3,12 +3,13 @@
 
 BCHSBot::BCHSBot()
 {
-	driveStick = new Joystick(1);
+	//driveStick = new Joystick(1);
 	leftJag1 = new Jaguar(3);
 	leftJag2 = new Jaguar(4);
 	rightJag1 = new Jaguar(1);
 	rightJag2 = new Jaguar(2);
 	ds = DriverStationLCD::GetInstance();
+	cat = new MadCatz(1);
 }
 BCHSBot::~BCHSBot()
 {
@@ -19,6 +20,7 @@ BCHSBot::~BCHSBot()
 	delete rightJag1;
 	delete rightJag2;
 	delete ds;
+	delete cat;
 }
 
 float BCHSBot::limitOutput(float x)
@@ -51,21 +53,22 @@ float BCHSBot::signSquare(float x)
 
 void BCHSBot::TeleopPeriodic()
 {
-	x = driveStick->GetX();
-	y = driveStick->GetY();
+
+	lY = cat->GetY(GenericHID::kLeftHand);
+	rY = cat ->GetY(GenericHID::kRightHand);
 	
-	x = signSquare(x);
-	y = signSquare(y);
-	x = limitOutput(x);
-	y = limitOutput(y);
 	
-	leftJag1->Set(y - x);
-	leftJag2->Set(y - x);
-	rightJag1->Set(-(y + x));
-	rightJag2->Set(-(y + x));
+	lY = signSquare(lY);
+	rY = signSquare(rY);
 	
-	ds->Printf(DriverStationLCD::kUser_Line1, 1, "%f", limitOutput(y - x));
-	ds->Printf(DriverStationLCD::kUser_Line2, 1, "%f", limitOutput(-1 * (y + x)));	
+	
+	leftJag1->Set(limitOutput(lY));
+	leftJag2->Set(limitOutput(lY));
+	rightJag1->Set(-limitOutput(rY));
+	rightJag2->Set(-limitOutput(rY));
+	
+	ds->Printf(DriverStationLCD::kUser_Line1, 1, "%f", limitOutput(lY));
+	ds->Printf(DriverStationLCD::kUser_Line2, 1, "%f", -limitOutput(rY));	
 
 	ds->UpdateLCD();
 }

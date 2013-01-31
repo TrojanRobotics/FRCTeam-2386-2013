@@ -377,7 +377,10 @@ SimpleTemplate_partialImage/Debug/Objects/2013/BCHSBot.o:  \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/Threshold.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/HSLImage.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/ColorImage.h \
-  C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h
+  C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h \
+  C:/Users/Laxman/Documents/GitHub/FRCTeam-2386-2013/C++/2013/MadCatz.h \
+  C:/WindRiver/vxworks-6.3/target/h/WPILib/GenericHID.h \
+  C:/WindRiver/vxworks-6.3/target/h/WPILib/ErrorBase.h
 
 C:/Users/Laxman/Documents/GitHub/FRCTeam-2386-2013/C++/2013/BCHSBot.h:
 
@@ -1134,3 +1137,9 @@ C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/HSLImage.h:
 C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/ColorImage.h:
 
 C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h:
+
+C:/Users/Laxman/Documents/GitHub/FRCTeam-2386-2013/C++/2013/MadCatz.h:
+
+C:/WindRiver/vxworks-6.3/target/h/WPILib/GenericHID.h:
+
+C:/WindRiver/vxworks-6.3/target/h/WPILib/ErrorBase.h:

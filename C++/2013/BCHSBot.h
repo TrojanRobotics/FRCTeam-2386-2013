@@ -2,6 +2,7 @@
 #define BCHS_BOT_H_
 
 #include "WPILib.h"
+#include "MadCatz.h"
 
 
 class BCHSBot : public IterativeRobot
@@ -13,11 +14,13 @@ public:
 	virtual float signSquare(float x);
 	virtual void TeleopPeriodic();
 	
+	
 private:
 	Joystick *driveStick;
 	Jaguar *leftJag1, *leftJag2, *rightJag1, *rightJag2;
-	float x, y, lX, lY, sX, sY, sLX, sLY;
+	float rY, lY;
 	DriverStationLCD *ds;
+	MadCatz *cat;
 	
 };
 
