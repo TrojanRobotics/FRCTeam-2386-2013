@@ -1,5 +1,6 @@
 package com.BCHS;
 
+import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Gyro;
@@ -19,7 +20,14 @@ public class Lib
 		LCD.println(DriverStationLCD.Line.kUser6, 1, Clear);
 		LCD.updateLCD();
 	}
-
+	public static double round(double num, int decimalPlaces)
+	{
+		double places = MathUtils.pow(10, decimalPlaces);
+		double newDouble = num * places;
+		int newInt = (int)newDouble;
+		return newInt/places;
+	}
+	
 	public static double limitOutput(double value)
 	{
 		if (value > 1.0) {

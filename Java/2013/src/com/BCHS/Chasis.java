@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 
-public class Chasis
+public class Chasis 
 {
 	Bundle leftSide, rightSide;
 	Encoder leftEncoder, rightEncoder;
@@ -30,7 +30,7 @@ public class Chasis
 		
 		leftSidePID = new PIDController (Config.CHASIS_PID[0],Config.CHASIS_PID[1],Config.CHASIS_PID[2],leftEncoder, this.leftSide);
 		rightSidePID = new PIDController(Config.CHASIS_PID[0],Config.CHASIS_PID[1],Config.CHASIS_PID[2],rightEncoder,this.rightSide);
-	}
+	}													
 	
 	public void set(double speed)
 	{
