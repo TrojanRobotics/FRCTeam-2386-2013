@@ -8,9 +8,9 @@ public class XboxController extends GenericHID implements IInputOutput
 {
     final int kDefaultLXAxis = 1;
     final int kDefaultLYAxis = 2;
-    final int kDefaultRXAxis = 3;
-    final int kDefaultRYAxis = 4;
-    final int kDefaultTriggerAxis = 5;
+    final int kDefaultRYAxis = 5;
+    final int kDefaultRXAxis = 4;
+    final int kDefaultTriggerAxis = 3;
     
     public static class XboxButtons
     {
@@ -44,14 +44,14 @@ public class XboxController extends GenericHID implements IInputOutput
        if (hand.value == GenericHID.Hand.kLeft.value)
            return m_ds.getStickAxis(m_port, m_axes[AxisType.kLX.value]);
        else
-           return m_ds.getStickAxis(m_port, m_axes[AxisType.kLY.value]);
+           return m_ds.getStickAxis(m_port, m_axes[AxisType.kRX.value]);
        
     }
 
     public double getY(GenericHID.Hand hand)
     {
-        if (hand.value == GenericHID.Hand.kRight.value)
-           return m_ds.getStickAxis(m_port, m_axes[AxisType.kRX.value]);
+        if (hand.value == GenericHID.Hand.kLeft.value)
+           return m_ds.getStickAxis(m_port, m_axes[AxisType.kLY.value]);
        else
            return m_ds.getStickAxis(m_port,m_axes[AxisType.kRY.value]);
     }

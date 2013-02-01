@@ -1,6 +1,7 @@
 package com.BCHS;
 
 import com.BCHS.misc.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 
@@ -33,8 +34,8 @@ public class Bot extends IterativeRobot
 	
 	public void teleopPeriodic()
 	{
-		double x = Controller.getX();
-		double y = Controller.getY();
+		double x = Controller.getX(GenericHID.Hand.kLeft);
+		double y = Controller.getY(GenericHID.Hand.kLeft);
 		
 		x = Lib.signSquare(x);
 		y = Lib.signSquare(y);
