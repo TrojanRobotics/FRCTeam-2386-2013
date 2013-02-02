@@ -36,7 +36,7 @@ public class Lib
 		} else if (value < -1.0) {
 			return -1.0;
 		} else {
-			return round((value),1);
+			return round(value,1);
 		}
 	}
 
@@ -66,10 +66,9 @@ public class Lib
 	public static double signSquare(double value)
 	{
 		if (value < 0.0) {
-			return -1.0 * value * value;
+			return round(-1.0 * value * value, 2);
 		} else {
-			return round((value * value), 2);
-			
+			return round(value * value, 2);
 		}
 	}
 
