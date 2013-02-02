@@ -34,9 +34,6 @@ public class Chasis
 	
 	public void set(double speed)
 	{
-		/*
-		 * TODO: FIX THIS LINE OF CODE
-		 */
 		leftSide.set(-speed);
 		rightSide.set(speed);
 	}

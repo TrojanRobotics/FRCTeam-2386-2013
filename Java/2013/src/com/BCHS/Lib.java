@@ -30,12 +30,13 @@ public class Lib
 	
 	public static double limitOutput(double value)
 	{
+		
 		if (value > 1.0) {
 			return 1.0;
 		} else if (value < -1.0) {
 			return -1.0;
 		} else {
-			return value;
+			return round((value),1);
 		}
 	}
 
@@ -67,7 +68,8 @@ public class Lib
 		if (value < 0.0) {
 			return -1.0 * value * value;
 		} else {
-			return value * value;
+			return round((value * value), 2);
+			
 		}
 	}
 
