@@ -25,6 +25,10 @@ public class Retrieval
 	{
 		retrievalJag.set(-1.0);
 	}
+    public void Still()
+    {
+        retrievalJag.set(0.0);
+    }  
 	public String getPosition()
 	{
 		if (retrievalJag.getSpeed() == 1.0)
@@ -32,4 +36,8 @@ public class Retrieval
 		else
 			return "In";
 	}
+    public void Limit()
+    {
+        
+    }
 }
