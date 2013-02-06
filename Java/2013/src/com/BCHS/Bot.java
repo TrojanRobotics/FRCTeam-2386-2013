@@ -13,6 +13,7 @@ public class Bot extends IterativeRobot
 	Shooter shooter;
 	Chasis chasis;
     Retrieval retrieval;
+	Solenoid solenoid;
 	
 	public void robotInit()
 	{
@@ -22,6 +23,7 @@ public class Bot extends IterativeRobot
 		Controller = new XboxController(1);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE);
         retrieval = new Retrieval(2);
+		solenoid = new Solenoid();
 	}
 	
 	public void disabledPeriodic()
@@ -66,13 +68,19 @@ public class Bot extends IterativeRobot
 		else 
 			shooter.set(0.0);
         
-       /* if (secondary.getRawButton(2))
-            retrieval.pushOut(1.0);
+		if (secondary.getRawButton(2))
+            retrieval.pushOut();
         else if (secondary.getRawButton(3))
-            retrieval.pullIn(-1.0);
+            retrieval.pullIn();
         else
-            retrieval.Still(0.0);
-         */
+            retrieval.Still();
+		
+		if (madcatz.getRawButton(6))
+			solenoid.set(true);
+		else
+			solenoid.set(false);
+		
+         
     }
 	
 	public void testPeriodic()

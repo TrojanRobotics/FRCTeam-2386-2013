@@ -13,17 +13,24 @@ public class Shooter
 	public Shooter(int channelOne, int channelTwo, int aChannel, int bChannel)
 	{
 		motorBundle = new Bundle(channelOne, channelTwo);
+		ShooterPID = new PIDController(kp, ki, kd, encoder, motorBundle);
+		encoder = new Encoder(aChannel, bChannel);
+		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+		encoder.setDistancePerPulse(Config.SE_DPP);
+		encoder.start();
+		
 		
 		kp = 0.0;
 		ki = 0.0;
 		kd = 0.0;
 		
-		encoder = new Encoder(aChannel, bChannel);
-		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
-		encoder.setDistancePerPulse(Config.SE_DPP);
-		encoder.start();
 	}
 	
+	public void setPRM(double RPM)
+	{
+		ShooterPID.enable();
+		ShooterPID.setSetpoint(RPM);
+	}
 	public void set(double speed)
 	{
 		motorBundle.set(-speed);
@@ -32,5 +39,6 @@ public class Shooter
 	public void stop()
 	{
 		motorBundle.stop();
+		ShooterPID.disable();
 	}
 }
