@@ -1,7 +1,3 @@
-	/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BCHS;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
@@ -20,19 +16,22 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
  */
 
 public class Camera {
-
 	public static class Direction {
 	
 		public final int value;
 		static final int left_val = 0;
 		static final int right_val = 1;
 		static final int center_val = 2;
+		static final int up_val = 3;
+		static final int down_val = 4;
 		static final int error_val = -1;
 
 		public static final Direction left = new Direction(left_val);
 		public static final Direction right = new Direction(right_val);
 		public static final Direction center = new Direction(center_val);
 		public static final Direction error = new Direction(error_val);
+		public static final Direction up = new Direction(up_val);
+		public static final Direction down = new Direction(down_val);
 
 
 		private Direction (int value) {
@@ -43,7 +42,7 @@ public class Camera {
 	AxisCamera camera;
 	//ParticleAnalysisReport[] orderedParticles;
 	int firstsWidth, pixelCentre, close;
-	int deadBand, cameraCenterX, deadBandPlusX, deadBandMinusX;
+	int deadBand, cameraCenterX, cameraCenterY, camHeight, deadBandPlusX, deadBandMinusX, deadBandPlusY, deadBandMinusY;
 	AnalogChannel ultraSonic;
 	ParticleAnalysisReport largestParticle;
 	Relay relay;
@@ -56,11 +55,15 @@ public class Camera {
 		//camera.writeBrightness(50);
 		relay = new Relay(Config.LIGHTS);
 		relay.setDirection(Relay.Direction.kReverse);
-		camWidth = camera.getResolution().width;
+		camHeight = camera.getResolution().height;
+
 		cameraCenterX = camWidth / 2;
+		cameraCenterY = camHeight / 2;
 		deadBand = 20;
 		deadBandMinusX = cameraCenterX - deadBand;
 		deadBandPlusX = cameraCenterX + deadBand;
+		deadBandMinusY = cameraCenterY - deadBand;
+		deadBandPlusY = cameraCenterY + deadBand;
 	}
 
 	public ParticleAnalysisReport[] getLargestParticle(int[] imageValues) {
@@ -107,7 +110,19 @@ public class Camera {
 			return Direction.error;
 		}
 	}
-
+	
+	Direction upOrDown(ParticleAnalysisReport particleAnalysisReport) {
+		if (particleAnalysisReport.center_mass_y > deadBandPlusY) {
+			return Direction.down;
+		} else if (particleAnalysisReport.center_mass_y < deadBandMinusY) {
+			return Direction.up;
+		} else if (particleAnalysisReport.center_mass_y >= deadBandMinusY && particleAnalysisReport.center_mass_y <= deadBandPlusY) {
+			return Direction.center;
+		} else {
+			return Direction.error;
+		}
+	}
+	
 	public void takePicture(int[] values) {
 		try {
 			ColorImage img = camera.getImage();
