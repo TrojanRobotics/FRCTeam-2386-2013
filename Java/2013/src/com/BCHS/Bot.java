@@ -12,14 +12,14 @@ public class Bot extends IterativeRobot
 	XboxController Controller;
 	Shooter shooter;
 	Chasis chasis;
-        Retrieval retrieval;
+    Retrieval retrieval;
 	Solenoid solenoid;
-	Compressor compressorx;
+	
 	public void robotInit()
 	{
 		madcatz = new Joystick(Config.Madcatz_JOYSTICK);
 		secondary = new Joystick(Config.SECONDARY_JOYSTICK);
-		compressorx = new Compressor( 1, 2, 3, 4);
+		
 		Controller = new XboxController(1);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE);
         retrieval = new Retrieval(2);
@@ -79,17 +79,8 @@ public class Bot extends IterativeRobot
 			solenoid.set(true);
 		else
 			solenoid.set(false);
-                
-                if (compressorx.getPressureSwitchValue(true)) 
-                {
-                    compressorx.start();
-                
-                }
-                else
-                {
-                    compressorx.stop();
-                }
-                                   
+		
+         
     }
 	
 	public void testPeriodic()
