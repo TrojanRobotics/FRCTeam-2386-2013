@@ -8,6 +8,7 @@ public class Compressor {
         
     }
     
+   
     public boolean getPressureSwitchValue(boolean switchValue)
     {
         return false;
