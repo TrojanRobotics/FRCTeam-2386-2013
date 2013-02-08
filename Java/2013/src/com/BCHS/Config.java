@@ -20,6 +20,8 @@ public interface Config
 	static final int[] RDRIVE = { 3, 4 };
 	static final int[] SHOOTER = { 7, 8 };
 	
+	static final int[] CHASIS_PID = {0, 1, 2};
+	
 	static final int RETRIEVE = 5;
 	static final int HOCKEY = 6;
 	
@@ -34,6 +36,7 @@ public interface Config
 	static final int[] LENCODER = { 3, 4 };
 	static final int[] RENCODER = { 1, 2 };
 	static final int[] SENCODER = { 5, 6 };
+	
 	
 	static final int TLIMIT_SWITCH = 8;
 	static final int BLIMIT_SWITCH = 9;

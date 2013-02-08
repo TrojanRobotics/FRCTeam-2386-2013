@@ -19,8 +19,8 @@ public class Chasis
 		this.leftSide = new Bundle(leftSide[0], leftSide[1]);
 		this.rightSide = new Bundle(rightSide[0], rightSide[1]);
 		
-		leftEncoder.setDistancePerPulse(Config.LEFT_SIDE_ENCODER_DPP);
-		rightEncoder.setDistancePerPulse(Config.RIGHT_SIDE_ENCODER_DPP);
+		leftEncoder.setDistancePerPulse(Config.LE_DPP);
+		rightEncoder.setDistancePerPulse(Config.RE_DPP);
 		
 		leftEncoder.start();
 		rightEncoder.start();
