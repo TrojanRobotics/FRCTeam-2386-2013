@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
  * @author mattbettinson
  */
 
-public class Camera {
-	public static class Direction {
+public class Camera
+{
+	public static class Direction
+	{
 	
 		public final int value;
 		static final int left_val = 0;
@@ -34,7 +36,8 @@ public class Camera {
 		public static final Direction down = new Direction(down_val);
 
 
-		private Direction (int value) {
+		private Direction (int value)
+		{
 			this.value = value;
 		}
 	}
@@ -49,7 +52,8 @@ public class Camera {
 	BinaryImage binaryImage;
 	int camWidth;
 	
-	public Camera() {
+	public Camera() 
+	{
 		camera = AxisCamera.getInstance();
 		camera.writeResolution(AxisCamera.ResolutionT.k320x240);
 		//camera.writeBrightness(50);
@@ -66,13 +70,15 @@ public class Camera {
 		deadBandPlusY = cameraCenterY + deadBand;
 	}
 
-	public ParticleAnalysisReport[] getLargestParticle(int[] imageValues) {
+	public ParticleAnalysisReport[] getLargestParticle(int[] imageValues)
+	{
 		
 		ColorImage colorImage;
 		BinaryImage thresholdImage, convexImage, smallObjects;
 		ParticleAnalysisReport[] particles = null;
 		
-		try {
+		try
+		{
 			relay.set(Relay.Value.kOn);
 			colorImage = camera.getImage(); 			
 
@@ -87,11 +93,14 @@ public class Camera {
 			convexImage.free();
 			smallObjects.free();
 			
-		} catch (AxisCameraException ex) {
+		} catch (AxisCameraException ex)
+		{
 			ex.printStackTrace();
-		} catch (NIVisionException ex) {
+		} catch (NIVisionException ex)
+		{
 			System.out.println("ZOMG ERROR " + ex.getMessage());
-		} finally {
+		} finally 
+		{
 			
 		}
 		
@@ -99,32 +108,50 @@ public class Camera {
 
 	}
 
-	public Direction leftOrRight(ParticleAnalysisReport report) {
-		if (report.center_mass_x < deadBandMinusX) {
-			return Direction.left;
-		} else if (report.center_mass_x > deadBandPlusX) {
-			return Direction.right;
-		} else if (report.center_mass_x >= deadBandMinusX && report.center_mass_x <= deadBandPlusX) {
-			return Direction.center;
-		} else {
-			return Direction.error;
-		}
+	public Direction leftOrRight(ParticleAnalysisReport report)
+	{
+		if (report.center_mass_x < deadBandMinusX) 
+			{
+				return Direction.left;
+			}
+		else if (report.center_mass_x > deadBandPlusX) 
+			{
+				return Direction.right;
+			} 
+		else if(report.center_mass_x >= deadBandMinusX && report.center_mass_x <= deadBandPlusX) 
+			{
+				return Direction.center;
+			}
+		else 
+			{
+				return Direction.error;
+			}
 	}
 	
-	Direction upOrDown(ParticleAnalysisReport particleAnalysisReport) {
-		if (particleAnalysisReport.center_mass_y > deadBandPlusY) {
+	Direction upOrDown(ParticleAnalysisReport particleAnalysisReport)
+	{
+		if (particleAnalysisReport.center_mass_y > deadBandPlusY)
+		{
 			return Direction.down;
-		} else if (particleAnalysisReport.center_mass_y < deadBandMinusY) {
+		}
+		else if (particleAnalysisReport.center_mass_y < deadBandMinusY)
+		{
 			return Direction.up;
-		} else if (particleAnalysisReport.center_mass_y >= deadBandMinusY && particleAnalysisReport.center_mass_y <= deadBandPlusY) {
+		}
+		else if (particleAnalysisReport.center_mass_y >= deadBandMinusY && particleAnalysisReport.center_mass_y <= deadBandPlusY) 
+		{
 			return Direction.center;
-		} else {
+		}
+		else
+		{
 			return Direction.error;
 		}
 	}
 	
-	public void takePicture(int[] values) {
-		try {
+	public void takePicture(int[] values)
+	{
+		try 
+		{
 			ColorImage img = camera.getImage();
 			BinaryImage bin = img.thresholdRGB(values[0], values[1], values[2], values[3], values[4], values[5]);
 			bin = bin.removeSmallObjects(true, 1);
@@ -135,23 +162,33 @@ public class Camera {
 			bin.write("/testMattISSIRI.png");
 			bin.free();
 
-		} catch (NIVisionException ex) {
+		} 
+		catch (NIVisionException ex)
+		{
 			ex.printStackTrace();
-		} catch (AxisCameraException ex) {
+		} 
+		catch (AxisCameraException ex)
+		{
 			ex.printStackTrace();
 		}
 	}
 
 	
 	
-	public void getNormalPicture() {
-		try {
+	public void getNormalPicture()
+	{
+		try 
+		{
 			ColorImage img = camera.getImage();
 			img.write("/testMattIsGood.png");
 			img.free();
-		} catch (NIVisionException ex) {
+		}
+		catch (NIVisionException ex)
+		{
 			ex.printStackTrace();
-		} catch (AxisCameraException ex) {
+		} 
+		catch (AxisCameraException ex)
+		{
 			ex.printStackTrace();
 		}
 	}
