@@ -17,7 +17,8 @@ public class Bot extends IterativeRobot
 	Compressor compressorx;
 	public void robotInit()
 	{
-		madcatz = new Joystick(Config.Madcatz_JOYSTICK);
+		
+                madcatz = new Joystick(Config.Madcatz_JOYSTICK);
 		secondary = new Joystick(Config.SECONDARY_JOYSTICK);
 		compressorx = new Compressor( 1, 2, 3, 4);
 		Controller = new XboxController(1);
@@ -83,7 +84,6 @@ public class Bot extends IterativeRobot
                 if (compressorx.getPressureSwitchValue(true)) 
                 {
                     compressorx.start();
-                
                 }
                 else
                 {
