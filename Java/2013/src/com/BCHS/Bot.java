@@ -1,9 +1,7 @@
 package com.BCHS;
 
 import com.BCHS.misc.XboxController;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.*;
 
 
 public class Bot extends IterativeRobot
@@ -15,7 +13,8 @@ public class Bot extends IterativeRobot
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
-	Solenoid solenoid;
+	Solenoid driveSolenoid, climbSolenoid;
+	Relay relay;
 	Compressor compressorx;
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
@@ -37,7 +36,11 @@ public class Bot extends IterativeRobot
 		//Controller = new XboxController(1);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL);
         retrieval = new Retrieval(2);
-		solenoid = new Solenoid();
+		
+		relay = new Relay(8);
+		relay.setDirection(Relay.Direction.kForward);;
+		driveSolenoid = new Solenoid(3);
+		climbSolenoid = new Solenoid(4);
 	}
 	
 	public void disabledPeriodic()
@@ -73,6 +76,8 @@ public class Bot extends IterativeRobot
 		chasis.leftSide.set(Lib.limitOutput(y - x));
 		chasis.rightSide.set(-Lib.limitOutput(y + x));
 		
+		driveSolenoid.set(true);
+		
 		if (secondaryJoystick.getTrigger())
 			shooter.set(1.0);
 		else if (secondaryJoystick.getRawButton(4))
@@ -87,10 +92,40 @@ public class Bot extends IterativeRobot
         else
             retrieval.Still();
 		
-		if (mainJoystick.getRawButton(6))
-			solenoid.set(true);
-		else
-			solenoid.set(false);
+		if (joystick) {
+			
+			if (mainJoystick.getRawButton(6))
+				relay.set(Relay.Value.kOn);
+			else
+				relay.set(Relay.Value.kOff);
+			
+			if (mainJoystick.getRawButton(10))
+				driveSolenoid.set(true);
+			else
+				driveSolenoid.set(false);
+			
+			if (mainJoystick.getRawButton(11))
+				climbSolenoid.set(true);
+			else
+				climbSolenoid.set(false);
+			
+		} else {
+			
+			if (controller.getRawButton(XboxController.XboxButtons.kAButton))
+				relay.set(Relay.Value.kOn);
+			else
+				relay.set(Relay.Value.kOff);
+			
+			if (controller.getRawButton(XboxController.XboxButtons.kRBButton))
+				driveSolenoid.set(true);
+			else
+				driveSolenoid.set(false);
+			
+			if (controller.getRawButton(XboxController.XboxButtons.kLBButton))
+				climbSolenoid.set(true);
+			else
+				climbSolenoid.set(false);
+		}
                 
         if (compressorx.getPressureSwitchValue(true)) 
 
