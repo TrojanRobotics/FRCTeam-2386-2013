@@ -29,7 +29,7 @@ public class Bot extends IterativeRobot
 		
         mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
-		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL[0], Config.SOLENOID_CHANNEL[1], Config.RELAY_CHANNEL);
+		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL[0], Config.SOLENOID_CHANNEL[1]);
         retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		
 	}
@@ -85,9 +85,9 @@ public class Bot extends IterativeRobot
 		if (joystick) {
 			
 			if (mainJoystick.getRawButton(6))
-				chasis.relay.set(Relay.Value.kOn);
+				chasis.compressor.setRelayValue(Relay.Value.kOn);
 			else
-				chasis.relay.set(Relay.Value.kOff);
+				chasis.compressor.setRelayValue(Relay.Value.kOff);
 			
 			if (mainJoystick.getRawButton(10))
 				chasis.driveSolenoid.set(true);
@@ -102,9 +102,9 @@ public class Bot extends IterativeRobot
 		} else {
 			
 			if (controller.getRawButton(XboxController.XboxButtons.kAButton))
-				chasis.relay.set(Relay.Value.kOn);
+				chasis.compressor.setRelayValue(Relay.Value.kOn);
 			else
-				chasis.relay.set(Relay.Value.kOff);
+				chasis.compressor.setRelayValue(Relay.Value.kOff);
 			
 			if (controller.getRawButton(XboxController.XboxButtons.kRBButton))
 				chasis.driveSolenoid.set(true);

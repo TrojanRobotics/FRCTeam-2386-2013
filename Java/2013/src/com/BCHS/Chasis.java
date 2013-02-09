@@ -10,10 +10,10 @@ public class Chasis
 	AnalogChannel ultrasonic;
 	PIDController leftSidePID, rightSidePID;
 	Solenoid driveSolenoid, climbSolenoid;
-	Relay relay;
+	Relay driveRelay;
 	Compressor compressor;
 
-	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide, int driveSoleChannel, int climbSoleChannel, int relayChannel)
+	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide, int driveSoleChannel, int climbSoleChannel)
 	{
 		leftEncoder = new Encoder(leftAChannel, leftBChannel);
 		rightEncoder = new Encoder(rightAChannel, rightBChannel);
@@ -29,8 +29,7 @@ public class Chasis
 		
 		driveSolenoid = new Solenoid(driveSoleChannel);
 		climbSolenoid = new Solenoid(climbSoleChannel);
-		relay = new Relay(relayChannel);
-		relay.setDirection(Relay.Direction.kForward);
+
 		
 		leftEncoder.setDistancePerPulse(Config.LEFT_SIDE_ENCODER_DPP);
 		rightEncoder.setDistancePerPulse(Config.RIGHT_SIDE_ENCODER_DPP);
