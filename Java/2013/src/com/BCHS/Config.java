@@ -2,35 +2,33 @@ package com.BCHS;
 
 public interface Config
 {
-	/**
-	 * Testing Constants
-	 */
-	static final boolean TESTING = false;
+	static double LEFT_SIDE_ENCODER_DPP = 0.0;
+	static double RIGHT_SIDE_ENCODER_DPP = 0.0;
 	
-	/**
-	 * GenericHID Constants
+	/*
+	 * GenericHID Contants
 	 */
-	static final int Madcatz_JOYSTICK = 1;
+	
+	static final int MADCATZ_JOYSTICK = 1;
 	static final int SECONDARY_JOYSTICK = 2;
+	static final int MAIN_JOYSTICK = 1;
 	
-	/**
+	static double [] CHASIS_PID = {1.0, 0.0, 0.0};
+	
+	/*
 	 * PWM Constants
 	 */
-	static final int[] LDRIVE = { 1, 2 };
-	static final int[] RDRIVE = { 3, 4 };
-	static final int[] SHOOTER = { 7, 8 };
+	static final int[] LDRIVE = {10, 9};
+	static final int[] RDRIVE = {8, 7};
 	
-	static final int[] CHASIS_PID = {0, 1, 2};
+	static final int SOLENOID_CHANNEL = 1337;
 	
-	static final int RETRIEVE = 5;
-	static final int HOCKEY = 6;
-	
-	/**
-	 * Analog Constants
+	/*
+	 * 
 	 */
 	static final int ULTRASONIC = 1;
 	
-	/**
+	/*
 	 * Digital Constants
 	 */
 	static final int[] LENCODER = { 3, 4 };
@@ -47,6 +45,7 @@ public interface Config
 	 */
 	static final int LIGHTS = 1;
 	
+
 	/**
 	 * Value Constants
 	 */
@@ -57,5 +56,9 @@ public interface Config
 	static final double LE_DPP = 0.0190;
 	static final double RE_DPP = 0.0240;
 	static final double SE_DPP = 0.18;
+
+	
+	static final double CLIMB_DPP = 0.1337;
 }
+
 

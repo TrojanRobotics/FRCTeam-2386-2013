@@ -8,36 +8,42 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class Bot extends IterativeRobot
 {
-	Joystick madcatz, secondary;
-	XboxController Controller;
+	Joystick mainJoystick, secondaryJoystick;
+	XboxController controller;
 	Shooter shooter;
 	Chasis chasis;
-    Retrieval retrieval;
+	Retrieval retrieval;
 	Solenoid solenoid;
 	Compressor compressorx;
 	
+	boolean joystick = true; //true = joystick, false = xbox controller
+	double x, y; // x and y values for joysticks/controller
+	
 	public void robotInit()
 	{
+		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		
-        madcatz = new Joystick(Config.Madcatz_JOYSTICK);
-		secondary = new Joystick(Config.SECONDARY_JOYSTICK);
-		compressorx = new Compressor( 1, 2, 3, 4);
-		Controller = new XboxController(1);
-		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE);
-        retrieval = new Retrieval(2);
+		if (joystick) {
+			mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
+		} else {
+			controller = new XboxController(Config.MADCATZ_JOYSTICK);
+		}
+		
+		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL);
+		compressorx = new Compressor(1,2,3,4);
+		retrieval = new Retrieval(2);
 		solenoid = new Solenoid();
 	}
 	
 	public void disabledPeriodic()
 	{
 		chasis.stop();
-        retrieval.Limit();
+
 	}
 	
 	public void teleopinit()
 	{
 		chasis.stop();
-        retrieval.Limit();
 	}
 	
 	public void autonomousPeriodic()
@@ -47,56 +53,49 @@ public class Bot extends IterativeRobot
 	
 	public void teleopPeriodic()
 	{
-		double x = Controller.getX(GenericHID.Hand.kLeft);
-		double y = Controller.getY(GenericHID.Hand.kLeft);
-		
-		x = Lib.round(x, 4);
-		y =Lib.round(y, 4);
+		if (joystick) {
+			x = mainJoystick.getX();
+			y = mainJoystick.getY();
+		} else {
+			x = controller.getX(GenericHID.Hand.kLeft);
+			y = controller.getY(GenericHID.Hand.kLeft);
+		}
 				
 		x = Lib.signSquare(x);
 		y = Lib.signSquare(y);
 		
 		chasis.leftSide.set(Lib.limitOutput(y - x));
 		chasis.rightSide.set(-Lib.limitOutput(y + x));
-			
-		System.out.println(x);
-		System.out.println(y);
 		
 		
-		if (secondary.getTrigger())
+		if (secondaryJoystick.getTrigger())
 			shooter.set(1.0);
-		else if (secondary.getRawButton(4))
+		else if (secondaryJoystick.getRawButton(4))
 			shooter.set(0.50);
 		else 
 			shooter.set(0.0);
         
-		if (secondary.getRawButton(2))
+		if (secondaryJoystick.getRawButton(2))
             retrieval.pushOut();
-        else if (secondary.getRawButton(3))
+        else if (secondaryJoystick.getRawButton(3))
             retrieval.pullIn();
         else
             retrieval.Still();
 		
-		if (madcatz.getRawButton(6))
+		if (mainJoystick.getRawButton(6))
 			solenoid.set(true);
 		else
 			solenoid.set(false);
                 
         if (compressorx.getPressureSwitchValue(true)) 
-			{
-				compressorx.start();
-            }
+			compressorx.start();
         else
-            {
-				compressorx.stop();
-			}
-                                   
-    }
+			compressorx.stop();                         
+	}
 	
+
 	public void testPeriodic()
 	{
 		
 	}
-
-	 
 }

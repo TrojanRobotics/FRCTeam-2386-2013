@@ -3,6 +3,8 @@ package com.BCHS;
 import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Solenoid;
+
 
 public class Chasis 
 {
@@ -10,26 +12,24 @@ public class Chasis
 	Encoder leftEncoder, rightEncoder;
 	AnalogChannel ultrasonic;
 	PIDController leftSidePID, rightSidePID;
-	
-	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide)
+	Solenoid solenoid;
+
+	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide, int solenoidChannel)
 	{
 		leftEncoder = new Encoder(leftAChannel, leftBChannel);
 		rightEncoder = new Encoder(rightAChannel, rightBChannel);
 		ultrasonic = new AnalogChannel(ultraSonic);
 		this.leftSide = new Bundle(leftSide[0], leftSide[1]);
 		this.rightSide = new Bundle(rightSide[0], rightSide[1]);
+
 		
 		leftEncoder.setDistancePerPulse(Config.LE_DPP);
 		rightEncoder.setDistancePerPulse(Config.RE_DPP);
+
+		solenoid = new Solenoid(solenoidChannel);
 		
-		leftEncoder.start();
-		rightEncoder.start();
-		
-		leftEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
-        rightEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
-		
-		leftSidePID = new PIDController (Config.CHASIS_PID[0],Config.CHASIS_PID[1],Config.CHASIS_PID[2],leftEncoder, this.leftSide);
-		rightSidePID = new PIDController(Config.CHASIS_PID[0],Config.CHASIS_PID[1],Config.CHASIS_PID[2],rightEncoder,this.rightSide);
+		leftEncoder.setDistancePerPulse(Config.LEFT_SIDE_ENCODER_DPP);
+		rightEncoder.setDistancePerPulse(Config.RIGHT_SIDE_ENCODER_DPP);
 	}													
 	
 	public void set(double speed)
@@ -62,5 +62,20 @@ public class Chasis
 	{
 		leftSidePID.setSetpoint(setpoint);
 		rightSidePID.setSetpoint(-setpoint);
+	}
+	
+	public void solenoidOn()
+	{
+		solenoid.set(true);
+	}
+	
+	public void solenoidOff()
+	{
+		solenoid.set(false);
+	}
+	
+	public boolean getSolenoidStatus()
+	{
+		return solenoid.get();
 	}
 }

@@ -26,7 +26,7 @@ public class Climber
 		Kd = 0.0;
 		
 		climbEncoder = new Encoder(aChannel, bChannel);
-		climbEncoder.setDistancePerPulse(0.1337);
+		climbEncoder.setDistancePerPulse(Config.CLIMB_DPP);
 		climbEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
 		climbEncoder.start();
 		
