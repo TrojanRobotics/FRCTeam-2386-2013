@@ -13,7 +13,6 @@ public class Bot extends IterativeRobot
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
-	Compressor compressorx;
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
 	double x, y; // x and y values for joysticks/controller
@@ -30,7 +29,6 @@ public class Bot extends IterativeRobot
 		
         mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
-		compressorx = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1], Config.PNEUMATICS[2], Config.PNEUMATICS[3]);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL[0], Config.SOLENOID_CHANNEL[1], Config.RELAY_CHANNEL);
         retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		
@@ -119,11 +117,10 @@ public class Bot extends IterativeRobot
 				chasis.climbSolenoid.set(false);
 		}
                 
-        if (compressorx.getPressureSwitchValue(true)) 
-
-			compressorx.start();
+        if (chasis.compressor.getPressureSwitchValue()) 
+			chasis.compressor.start();
         else
-			compressorx.stop();                         
+			chasis.compressor.stop();                         
 	}
 
 	public void testPeriodic()

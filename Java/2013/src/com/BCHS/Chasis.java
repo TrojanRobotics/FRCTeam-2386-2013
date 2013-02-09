@@ -11,6 +11,7 @@ public class Chasis
 	PIDController leftSidePID, rightSidePID;
 	Solenoid driveSolenoid, climbSolenoid;
 	Relay relay;
+	Compressor compressor;
 
 	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide, int driveSoleChannel, int climbSoleChannel, int relayChannel)
 	{
@@ -23,7 +24,9 @@ public class Chasis
 		
 		leftEncoder.setDistancePerPulse(Config.LE_DPP);
 		rightEncoder.setDistancePerPulse(Config.RE_DPP);
-
+		
+		compressor = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1], Config.PNEUMATICS[2], Config.PNEUMATICS[3]);
+		
 		driveSolenoid = new Solenoid(driveSoleChannel);
 		climbSolenoid = new Solenoid(climbSoleChannel);
 		relay = new Relay(relayChannel);
