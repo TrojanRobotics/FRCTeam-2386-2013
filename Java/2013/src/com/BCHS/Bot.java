@@ -40,7 +40,7 @@ public class Bot extends IterativeRobot
         retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		climber = new Climber(Config.CLIMBER_CHANNEL);
 		
-		
+
 		printData();
 		
 	}
@@ -93,8 +93,6 @@ public class Bot extends IterativeRobot
 		
 		chasis.leftSide.set(Lib.limitOutput(y - x));
 		chasis.rightSide.set(-Lib.limitOutput(y + x));
-		
-		chasis.driveSolenoid.set(true);
 		
 		if (secondaryJoystick.getTrigger())
 			shooter.set(1.0);
@@ -172,11 +170,11 @@ public class Bot extends IterativeRobot
 		
 		
                 
-
+/*
         if (chasis.compressor.getPressureSwitchValue()) 
 			chasis.compressor.start();
         else
-			chasis.compressor.stop();                         
+			chasis.compressor.stop();   */                      
 	}
 
 	public void testPeriodic()
