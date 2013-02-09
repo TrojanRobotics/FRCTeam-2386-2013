@@ -7,32 +7,34 @@ public class Chasis
 {
 	Bundle leftSide, rightSide;
 	Encoder leftEncoder, rightEncoder;
-	AnalogChannel ultrasonic;
 	PIDController leftSidePID, rightSidePID;
 	Solenoid driveSolenoid, climbSolenoid;
-	Relay driveRelay;
 	Compressor compressor;
 
 	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide)
 	{
 		leftEncoder = new Encoder(leftAChannel, leftBChannel);
 		rightEncoder = new Encoder(rightAChannel, rightBChannel);
-		ultrasonic = new AnalogChannel(ultraSonic);
 		this.leftSide = new Bundle(leftSide[0], leftSide[1]);
 		this.rightSide = new Bundle(rightSide[0], rightSide[1]);
 
-		
 		leftEncoder.setDistancePerPulse(Config.LE_DPP);
 		rightEncoder.setDistancePerPulse(Config.RE_DPP);
+		
+		leftEncoder.start();
+		rightEncoder.start();
+		
+		leftEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
+		rightEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
+		
+		leftSidePID = new PIDController(Config.PID[0],Config.PID[1],Config.PID[2],leftEncoder, this.leftSide);
+		rightSidePID = new PIDController(Config.PID[0],Config.PID[1],Config.PID[2],rightEncoder, this.rightSide);
 		
 		compressor = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1], Config.PNEUMATICS[2], Config.PNEUMATICS[3]);
 		
 		driveSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[0]);
 		climbSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[1]);
 
-		
-		leftEncoder.setDistancePerPulse(Config.LEFT_SIDE_ENCODER_DPP);
-		rightEncoder.setDistancePerPulse(Config.RIGHT_SIDE_ENCODER_DPP);
 	}													
 	
 	public void set(double speed)
