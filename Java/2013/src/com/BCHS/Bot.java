@@ -110,7 +110,8 @@ public class Bot extends IterativeRobot
             retrieval.pullIn();
         
 		
-		if (joystick) {
+		if (joystick)
+		{
 			
 			if (mainJoystick.getRawButton(6))
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
@@ -127,7 +128,16 @@ public class Bot extends IterativeRobot
 			else
 				chasis.climbSolenoid.set(false);
 			
-		} else {
+			if (mainJoystick.getRawButton(9))
+				shooter.setTableForward();
+			else if (mainJoystick.getRawButton(8))
+				shooter.setTableReverse();
+			else 
+				shooter.setTableNeutral();
+			
+		}
+		else
+		{
 			
 			if (controller.getRawButton(XboxController.XboxButtons.kAButton))
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
@@ -143,7 +153,16 @@ public class Bot extends IterativeRobot
 				chasis.climbSolenoid.set(true);
 			else
 				chasis.climbSolenoid.set(false);
+			
+			if (controller.getRawButton(XboxController.XboxButtons.kBButton))
+				shooter.setTableForward();
+			else if (controller.getRawButton(XboxController.XboxButtons.kXButton))
+				shooter.setTableReverse();
+			else 
+				shooter.setTableNeutral();
 		}
+		
+		
                 
 
         if (chasis.compressor.getPressureSwitchValue()) 
