@@ -10,7 +10,7 @@ public interface Config
 	static final int SECONDARY_JOYSTICK = 2;
 	static final int MAIN_JOYSTICK = 1;
 	
-	static double [] CHASIS_PID = {1.0, 0.0, 0.0};
+	static double [] CLIMB_PID = {1.0, 0.0, 0.0};
 	
 	/*
 	 * PWM Constants

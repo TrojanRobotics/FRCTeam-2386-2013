@@ -23,9 +23,6 @@ public class Climber
 	
 	public Climber(int aChannel, int bChannel, int jagChannel)
 	{
-		Kp = 1.0;
-		Ki = 0.0;
-		Kd = 0.0;
 		
 		climbEncoder = new Encoder(aChannel, bChannel);
 		climbEncoder.setDistancePerPulse(Config.CLIMB_DPP);
@@ -35,7 +32,7 @@ public class Climber
 		
 		climbJaguar = new Jaguar(jagChannel);
 		
-		climbPID = new PIDController(Kp, Ki, Kd, climbEncoder, climbJaguar);	
+		climbPID = new PIDController(Config.CLIMB_PID[0],Config.CLIMB_PID[1], Config.CLIMB_PID[2], climbEncoder, climbJaguar);	
 	}
 
 	Climber(int[] CLIMBER_CHANNEL) {
