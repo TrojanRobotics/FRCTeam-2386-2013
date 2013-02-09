@@ -23,7 +23,6 @@ public interface Config
 	
 
 	static final int[] SOLENOID_CHANNEL = {3, 4};
-	static final int RELAY_CHANNEL = 8;
 	static final int RETRIEVAL_CHANNEL = 2;
 	
 	
