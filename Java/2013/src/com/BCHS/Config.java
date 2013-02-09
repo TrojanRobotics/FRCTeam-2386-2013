@@ -24,6 +24,7 @@ public interface Config
 
 	static final int[] SOLENOID_CHANNEL = {3, 4};
 	static final int RETRIEVAL_CHANNEL = 2;
+	static final int[] CLIMBER_CHANNEL = {5, 6, 6};
 	
 	
 	static final int[] PNEUMATICS = {3, 13, 3, 8};

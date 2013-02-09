@@ -12,6 +12,7 @@ public class Bot extends IterativeRobot
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
+	Climber climber;
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
 	double x, y; // x and y values for joysticks/controller
@@ -33,6 +34,7 @@ public class Bot extends IterativeRobot
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE);
         retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
+		climber = new Climber(Config.CLIMBER_CHANNEL);
 		
 	}
 	
@@ -112,6 +114,10 @@ public class Bot extends IterativeRobot
 			else 
 				shooter.setTableNeutral();
 			
+			if (mainJoystick.getRawButton(4))
+				climber.setWheelyBar(true);
+			else
+				climber.setWheelyBar(false);
 		}
 		else
 		{
@@ -137,6 +143,11 @@ public class Bot extends IterativeRobot
 				shooter.setTableReverse();
 			else 
 				shooter.setTableNeutral();
+			
+			if (controller.getRawButton(XboxController.XboxButtons.kYButton))
+				climber.setWheelyBar(true);
+			else
+				climber.setWheelyBar(false);
 		}
 		
 		
