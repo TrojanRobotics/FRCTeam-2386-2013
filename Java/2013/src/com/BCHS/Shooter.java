@@ -20,7 +20,7 @@ public class Shooter
 		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 		encoder.setDistancePerPulse(Config.SE_DPP);
 		relay = new Relay(10);
-		relay.setDirection(Relay.Direction.kBoth);
+		relay.setDirection(Relay.Direction.kForward);
 		encoder.start();
 		
 		
@@ -46,4 +46,22 @@ public class Shooter
 		motorBundle.stop();
 		ShooterPID.disable();
 	}
+	
+	public void setTableForward()
+	{
+		relay.setDirection(Relay.Direction.kForward);
+		relay.set(Relay.Value.kOn);
+	}
+	
+	public void setTableReverse()
+	{
+		relay.setDirection(Relay.Direction.kReverse);
+		relay.set(Relay.Value.kOn);
+	}
+	
+	public void setTableNeutral()
+	{
+		relay.set(Relay.Value.kOff);
+	}
+			
 }
