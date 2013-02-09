@@ -2,9 +2,6 @@ package com.BCHS;
 
 public interface Config
 {
-	static double LEFT_SIDE_ENCODER_DPP = 0.0;
-	static double RIGHT_SIDE_ENCODER_DPP = 0.0;
-	
 	/*
 	 * GenericHID Contants
 	 */

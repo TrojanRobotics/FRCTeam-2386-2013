@@ -2,6 +2,7 @@ package com.BCHS;
 
 import com.BCHS.misc.XboxController;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Bot extends IterativeRobot
@@ -16,9 +17,12 @@ public class Bot extends IterativeRobot
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
 	double x, y; // x and y values for joysticks/controller
+	double Kp, Ki, Kd;
+	boolean setOnce;
 	
 	public void robotInit()
 	{
+		setOnce = false;
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		
 		if (joystick)
@@ -36,22 +40,41 @@ public class Bot extends IterativeRobot
         retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		climber = new Climber(Config.CLIMBER_CHANNEL);
 		
+		Kp = 0.1;
+		Ki = 0.0;
+		Kd = 0.0;
+		
+		printData();
+		
 	}
 	
 	public void disabledPeriodic()
 	{
 		chasis.stop();
+		chasis.leftEncoder.reset();
+		chasis.rightEncoder.reset();
+		
+		Kp = SmartDashboard.getNumber("P", Kp);
+		Ki = SmartDashboard.getNumber("I", Ki);
+		Kd = SmartDashboard.getNumber("D", Kd);
 
 	}
 	
 	public void teleopinit()
 	{
-		chasis.stop();
+		
 	}
 	
 	public void autonomousPeriodic()
 	{
-		
+		if (!setOnce) {
+			chasis.leftSidePID.setPID(Kp, Ki, Kd);
+			chasis.rightSidePID.setPID(Kp, Ki, Kd);
+			chasis.leftSidePID.setSetpoint(24.0);
+			chasis.rightSidePID.setSetpoint(-24.0);
+			setOnce = true;
+		}
+		printData();
 	}
 	
 	public void teleopPeriodic()
@@ -162,5 +185,18 @@ public class Bot extends IterativeRobot
 	public void testPeriodic()
 	{
 		
+	}
+	
+	public void printData()
+	{
+		SmartDashboard.putNumber("leftside",(chasis.leftEncoder.getRate()) * -1);
+		SmartDashboard.putNumber("rightside",chasis.rightEncoder.getRate());
+		
+		SmartDashboard.putNumber("leftsideD",(chasis.leftEncoder.getDistance()));
+		SmartDashboard.putNumber("rightsideD",chasis.rightEncoder.getDistance());
+		
+		SmartDashboard.putNumber("P", Kp);
+		SmartDashboard.putNumber("I", Ki);
+		SmartDashboard.putNumber("D", Kd);
 	}
 }
