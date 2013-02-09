@@ -40,9 +40,6 @@ public class Bot extends IterativeRobot
         retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		climber = new Climber(Config.CLIMBER_CHANNEL);
 		
-		Kp = 0.1;
-		Ki = 0.0;
-		Kd = 0.0;
 		
 		printData();
 		
