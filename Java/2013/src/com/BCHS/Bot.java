@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class Bot extends IterativeRobot
 {
+
 	Joystick mainJoystick, secondaryJoystick;
 	XboxController controller;
+
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
@@ -29,9 +31,12 @@ public class Bot extends IterativeRobot
 			controller = new XboxController(Config.MADCATZ_JOYSTICK);
 		}
 		
+        mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
+		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
+		compressorx = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1], Config.PNEUMATICS[2], Config.PNEUMATICS[3]);
+		//Controller = new XboxController(1);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL);
-		compressorx = new Compressor(1,2,3,4);
-		retrieval = new Retrieval(2);
+        retrieval = new Retrieval(2);
 		solenoid = new Solenoid();
 	}
 	
@@ -53,6 +58,7 @@ public class Bot extends IterativeRobot
 	
 	public void teleopPeriodic()
 	{
+		
 		if (joystick) {
 			x = mainJoystick.getX();
 			y = mainJoystick.getY();
@@ -66,7 +72,6 @@ public class Bot extends IterativeRobot
 		
 		chasis.leftSide.set(Lib.limitOutput(y - x));
 		chasis.rightSide.set(-Lib.limitOutput(y + x));
-		
 		
 		if (secondaryJoystick.getTrigger())
 			shooter.set(1.0);
@@ -88,11 +93,11 @@ public class Bot extends IterativeRobot
 			solenoid.set(false);
                 
         if (compressorx.getPressureSwitchValue(true)) 
+
 			compressorx.start();
         else
 			compressorx.stop();                         
 	}
-	
 
 	public void testPeriodic()
 	{

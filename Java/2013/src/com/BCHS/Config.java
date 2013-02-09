@@ -21,7 +21,9 @@ public interface Config
 	static final int[] LDRIVE = {10, 9};
 	static final int[] RDRIVE = {8, 7};
 	
+
 	static final int SOLENOID_CHANNEL = 1337;
+	static final int[] PNEUMATICS = {3, 13, 3, 8};
 	
 	/*
 	 * 
