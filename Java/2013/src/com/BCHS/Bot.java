@@ -9,7 +9,6 @@ public class Bot extends IterativeRobot
 
 	Joystick mainJoystick, secondaryJoystick;
 	XboxController controller;
-
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
@@ -21,9 +20,12 @@ public class Bot extends IterativeRobot
 	{
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		
-		if (joystick) {
+		if (joystick)
+		{
 			mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
-		} else {
+		}
+		else 
+		{
 			controller = new XboxController(Config.MADCATZ_JOYSTICK);
 		}
 		
@@ -53,10 +55,13 @@ public class Bot extends IterativeRobot
 	public void teleopPeriodic()
 	{
 		
-		if (joystick) {
+		if (joystick)
+		{
 			x = mainJoystick.getX();
 			y = mainJoystick.getY();
-		} else {
+		}
+		else
+		{
 			x = controller.getX(GenericHID.Hand.kLeft);
 			y = controller.getY(GenericHID.Hand.kLeft);
 		}
@@ -117,6 +122,7 @@ public class Bot extends IterativeRobot
 				chasis.climbSolenoid.set(false);
 		}
                 
+
         if (chasis.compressor.getPressureSwitchValue()) 
 			chasis.compressor.start();
         else

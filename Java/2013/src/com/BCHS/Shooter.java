@@ -2,12 +2,14 @@ package com.BCHS;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Relay;
 
 public class Shooter 
 {
 	Bundle motorBundle;
 	Encoder encoder;
 	PIDController ShooterPID;
+	Relay relay;
 	double kp, ki, kd;
 	
 	public Shooter(int channelOne, int channelTwo, int aChannel, int bChannel)
@@ -17,6 +19,8 @@ public class Shooter
 		encoder = new Encoder(aChannel, bChannel);
 		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 		encoder.setDistancePerPulse(Config.SE_DPP);
+		relay = new Relay(10);
+		relay.setDirection(Relay.Direction.kBoth);
 		encoder.start();
 		
 		
@@ -31,6 +35,7 @@ public class Shooter
 		ShooterPID.enable();
 		ShooterPID.setSetpoint(RPM);
 	}
+
 	public void set(double speed)
 	{
 		motorBundle.set(-speed);

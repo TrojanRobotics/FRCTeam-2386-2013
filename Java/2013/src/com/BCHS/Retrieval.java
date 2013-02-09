@@ -4,38 +4,28 @@
  */
 package com.BCHS;
 
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Solenoid;
 /**
  *
  * @author Laxman
  */
 public class Retrieval 
 {
-	Jaguar retrievalJag;
+	Solenoid solenoid;
 	
 	public Retrieval(int channel)
 	{
-		retrievalJag = new Jaguar(channel);
+		solenoid = new Solenoid(channel);
 	}
 	public void pushOut()
 	{
-		retrievalJag.set(1.0);
+		solenoid.set(true);
 	}
 	public void pullIn()
 	{
-		retrievalJag.set(-1.0);
+		solenoid.set(false);
 	}
-    public void Still()
-    {
-        retrievalJag.set(0.0);
-    }  
-	public String getPosition()
-	{
-		if (retrievalJag.getSpeed() == 1.0)
-			return "Out";
-		else
-			return "In";
-	}
+	
     public void Limit()
     {
         
