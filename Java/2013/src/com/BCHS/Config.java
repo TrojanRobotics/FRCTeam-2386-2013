@@ -22,7 +22,11 @@ public interface Config
 	static final int[] RDRIVE = {8, 7};
 	
 
-	static final int SOLENOID_CHANNEL = 1337;
+	static final int[] SOLENOID_CHANNEL = {3, 4};
+	static final int RELAY_CHANNEL = 8;
+	static final int RETRIEVAL_CHANNEL = 2;
+	
+	
 	static final int[] PNEUMATICS = {3, 13, 3, 8};
 	
 	/*

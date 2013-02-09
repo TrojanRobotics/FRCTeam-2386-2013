@@ -13,8 +13,6 @@ public class Bot extends IterativeRobot
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
-	Solenoid driveSolenoid, climbSolenoid;
-	Relay relay;
 	Compressor compressorx;
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
@@ -33,14 +31,9 @@ public class Bot extends IterativeRobot
         mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		compressorx = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1], Config.PNEUMATICS[2], Config.PNEUMATICS[3]);
-		//Controller = new XboxController(1);
-		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL);
-        retrieval = new Retrieval(2);
+		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE, Config.SOLENOID_CHANNEL[0], Config.SOLENOID_CHANNEL[1], Config.RELAY_CHANNEL);
+        retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		
-		relay = new Relay(8);
-		relay.setDirection(Relay.Direction.kForward);;
-		driveSolenoid = new Solenoid(3);
-		climbSolenoid = new Solenoid(4);
 	}
 	
 	public void disabledPeriodic()
@@ -76,7 +69,7 @@ public class Bot extends IterativeRobot
 		chasis.leftSide.set(Lib.limitOutput(y - x));
 		chasis.rightSide.set(-Lib.limitOutput(y + x));
 		
-		driveSolenoid.set(true);
+		chasis.driveSolenoid.set(true);
 		
 		if (secondaryJoystick.getTrigger())
 			shooter.set(1.0);
@@ -87,44 +80,43 @@ public class Bot extends IterativeRobot
         
 		if (secondaryJoystick.getRawButton(2))
             retrieval.pushOut();
-        else if (secondaryJoystick.getRawButton(3))
+        else 
             retrieval.pullIn();
-        else
-            retrieval.Still();
+        
 		
 		if (joystick) {
 			
 			if (mainJoystick.getRawButton(6))
-				relay.set(Relay.Value.kOn);
+				chasis.relay.set(Relay.Value.kOn);
 			else
-				relay.set(Relay.Value.kOff);
+				chasis.relay.set(Relay.Value.kOff);
 			
 			if (mainJoystick.getRawButton(10))
-				driveSolenoid.set(true);
+				chasis.driveSolenoid.set(true);
 			else
-				driveSolenoid.set(false);
+				chasis.driveSolenoid.set(false);
 			
 			if (mainJoystick.getRawButton(11))
-				climbSolenoid.set(true);
+				chasis.climbSolenoid.set(true);
 			else
-				climbSolenoid.set(false);
+				chasis.climbSolenoid.set(false);
 			
 		} else {
 			
 			if (controller.getRawButton(XboxController.XboxButtons.kAButton))
-				relay.set(Relay.Value.kOn);
+				chasis.relay.set(Relay.Value.kOn);
 			else
-				relay.set(Relay.Value.kOff);
+				chasis.relay.set(Relay.Value.kOff);
 			
 			if (controller.getRawButton(XboxController.XboxButtons.kRBButton))
-				driveSolenoid.set(true);
+				chasis.driveSolenoid.set(true);
 			else
-				driveSolenoid.set(false);
+				chasis.driveSolenoid.set(false);
 			
 			if (controller.getRawButton(XboxController.XboxButtons.kLBButton))
-				climbSolenoid.set(true);
+				chasis.climbSolenoid.set(true);
 			else
-				climbSolenoid.set(false);
+				chasis.climbSolenoid.set(false);
 		}
                 
         if (compressorx.getPressureSwitchValue(true)) 

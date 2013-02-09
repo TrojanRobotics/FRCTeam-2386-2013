@@ -1,9 +1,6 @@
 package com.BCHS;
 
-import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.*;
 
 
 public class Chasis 
@@ -12,9 +9,10 @@ public class Chasis
 	Encoder leftEncoder, rightEncoder;
 	AnalogChannel ultrasonic;
 	PIDController leftSidePID, rightSidePID;
-	Solenoid solenoid;
+	Solenoid driveSolenoid, climbSolenoid;
+	Relay relay;
 
-	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide, int solenoidChannel)
+	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide, int driveSoleChannel, int climbSoleChannel, int relayChannel)
 	{
 		leftEncoder = new Encoder(leftAChannel, leftBChannel);
 		rightEncoder = new Encoder(rightAChannel, rightBChannel);
@@ -26,7 +24,10 @@ public class Chasis
 		leftEncoder.setDistancePerPulse(Config.LE_DPP);
 		rightEncoder.setDistancePerPulse(Config.RE_DPP);
 
-		solenoid = new Solenoid(solenoidChannel);
+		driveSolenoid = new Solenoid(driveSoleChannel);
+		climbSolenoid = new Solenoid(climbSoleChannel);
+		relay = new Relay(relayChannel);
+		relay.setDirection(Relay.Direction.kForward);
 		
 		leftEncoder.setDistancePerPulse(Config.LEFT_SIDE_ENCODER_DPP);
 		rightEncoder.setDistancePerPulse(Config.RIGHT_SIDE_ENCODER_DPP);
@@ -62,20 +63,5 @@ public class Chasis
 	{
 		leftSidePID.setSetpoint(setpoint);
 		rightSidePID.setSetpoint(-setpoint);
-	}
-	
-	public void solenoidOn()
-	{
-		solenoid.set(true);
-	}
-	
-	public void solenoidOff()
-	{
-		solenoid.set(false);
-	}
-	
-	public boolean getSolenoidStatus()
-	{
-		return solenoid.get();
 	}
 }
