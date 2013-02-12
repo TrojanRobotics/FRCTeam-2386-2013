@@ -11,7 +11,7 @@ public class Chasis
 	Solenoid driveSolenoid, climbSolenoid;
 	Compressor compressor;
 
-	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int ultraSonic, int[] leftSide, int[] rightSide)
+	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel, int[] leftSide, int[] rightSide)
 	{
 		leftEncoder = new Encoder(leftAChannel, leftBChannel);
 		rightEncoder = new Encoder(rightAChannel, rightBChannel);
@@ -30,7 +30,7 @@ public class Chasis
 		leftSidePID = new PIDController(Config.PID[0],Config.PID[1],Config.PID[2],leftEncoder, this.leftSide);
 		rightSidePID = new PIDController(Config.PID[0],Config.PID[1],Config.PID[2],rightEncoder, this.rightSide);
 		
-		compressor = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1], Config.PNEUMATICS[2], Config.PNEUMATICS[3]);
+		compressor = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1]);
 		
 		driveSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[0]);
 		climbSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[1]);

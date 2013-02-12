@@ -10,13 +10,13 @@ public class Bot extends IterativeRobot
 
 	Joystick mainJoystick, secondaryJoystick;
 	XboxController controller;
-	Shooter shooter;
+	//Shooter shooter;
 	Chasis chasis;
-	Retrieval retrieval;
-	Climber climber;
+	//Retrieval retrieval;
+	//Climber climber;
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
-	double x, y; // x and y values for joysticks/controller
+	double x, y, y2; // x and y values for joysticks/controller
 	double Kp, Ki, Kd;
 	boolean setOnce;
 	
@@ -25,20 +25,17 @@ public class Bot extends IterativeRobot
 		setOnce = false;
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		
-		if (joystick)
-		{
+		if (joystick) {
 			mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
-		}
-		else 
-		{
+		} else {
 			controller = new XboxController(Config.MADCATZ_JOYSTICK);
 		}
 		
         mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
-		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.ULTRASONIC, Config.LDRIVE, Config.RDRIVE);
-        retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
-		climber = new Climber(Config.CLIMBER_CHANNEL);
+		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.LDRIVE, Config.RDRIVE);
+        //retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
+		//climber = new Climber(Config.CLIMBER_CHANNEL);
 		
 
 		printData();
@@ -77,104 +74,114 @@ public class Bot extends IterativeRobot
 	public void teleopPeriodic()
 	{
 		
-		if (joystick)
-		{
+		if (joystick) {
 			x = mainJoystick.getX();
 			y = mainJoystick.getY();
-		}
-		else
-		{
+            y2 = secondaryJoystick.getY();
+		} else {
 			x = controller.getX(GenericHID.Hand.kLeft);
 			y = controller.getY(GenericHID.Hand.kLeft);
 		}
 				
 		x = Lib.signSquare(x);
 		y = Lib.signSquare(y);
+        y2 = Lib.signSquare(y2);
 		
-		chasis.leftSide.set(Lib.limitOutput(y - x));
-		chasis.rightSide.set(-Lib.limitOutput(y + x));
 		
-		if (secondaryJoystick.getTrigger())
+		/*
+		if (secondaryJoystick.getTrigger()) {
 			shooter.set(1.0);
-		else if (secondaryJoystick.getRawButton(4))
+        }else if (secondaryJoystick.getRawButton(4)) {
 			shooter.set(0.50);
-		else 
+        }else {
 			shooter.set(0.0);
+        }
         
-		if (secondaryJoystick.getRawButton(2))
+		if (secondaryJoystick.getRawButton(2)) {
             retrieval.pushOut();
-        else 
+        } else { 
             retrieval.pullIn();
-        
+        }
+        */
 		
-		if (joystick)
-		{
+		if (joystick) {
 			
-			if (mainJoystick.getRawButton(6))
+			if (mainJoystick.getRawButton(6)) {
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
-			else
+            } else {
 				chasis.compressor.setRelayValue(Relay.Value.kOff);
-			
-			if (mainJoystick.getRawButton(10))
+            }
+            
+			if (mainJoystick.getRawButton(10)) {
 				chasis.driveSolenoid.set(true);
-			else
+                chasis.leftSide.set(Lib.limitOutput(y - x));
+                chasis.rightSide.set(-Lib.limitOutput(y + x));
+            } else {
 				chasis.driveSolenoid.set(false);
-			
-			if (mainJoystick.getRawButton(11))
+            }
+            
+			if (mainJoystick.getRawButton(11)) {
 				chasis.climbSolenoid.set(true);
-			else
+                chasis.leftSide.set(Lib.limitOutput(y));
+                chasis.rightSide.set(-Lib.limitOutput(y2));
+            } else {
 				chasis.climbSolenoid.set(false);
-			
-			if (mainJoystick.getRawButton(9))
+            }
+            /*
+			if (mainJoystick.getRawButton(9)) {
 				shooter.setTableForward();
-			else if (mainJoystick.getRawButton(8))
+            } else if (mainJoystick.getRawButton(8)) {
 				shooter.setTableReverse();
-			else 
+            } else {
 				shooter.setTableNeutral();
-			
-			if (mainJoystick.getRawButton(4))
+            }
+            
+			if (mainJoystick.getRawButton(4)) {
 				climber.setWheelyBar(true);
-			else
+            } else {
 				climber.setWheelyBar(false);
-		}
-		else
-		{
-			
-			if (controller.getRawButton(XboxController.XboxButtons.kAButton))
+            }
+            */
+		} else {
+			if (controller.getRawButton(XboxController.XboxButtons.kAButton)) {
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
-			else
+            } else {
 				chasis.compressor.setRelayValue(Relay.Value.kOff);
+            }
 			
-			if (controller.getRawButton(XboxController.XboxButtons.kRBButton))
+			if (controller.getRawButton(XboxController.XboxButtons.kRBButton)) {
 				chasis.driveSolenoid.set(true);
-			else
+            } else {
 				chasis.driveSolenoid.set(false);
-			
-			if (controller.getRawButton(XboxController.XboxButtons.kLBButton))
+            }
+            
+			if (controller.getRawButton(XboxController.XboxButtons.kLBButton)) {
 				chasis.climbSolenoid.set(true);
-			else
+            } else {
 				chasis.climbSolenoid.set(false);
-			
-			if (controller.getRawButton(XboxController.XboxButtons.kBButton))
+            }
+			/*
+			if (controller.getRawButton(XboxController.XboxButtons.kBButton)) {
 				shooter.setTableForward();
-			else if (controller.getRawButton(XboxController.XboxButtons.kXButton))
+            } else if (controller.getRawButton(XboxController.XboxButtons.kXButton)) {
 				shooter.setTableReverse();
-			else 
+            } else {
 				shooter.setTableNeutral();
+            }
 			
-			if (controller.getRawButton(XboxController.XboxButtons.kYButton))
+			if (controller.getRawButton(XboxController.XboxButtons.kYButton)) {
 				climber.setWheelyBar(true);
-			else
+            } else {
 				climber.setWheelyBar(false);
+            }
+            */
 		}
 		
-		
-                
-/*
-        if (chasis.compressor.getPressureSwitchValue()) 
+        if (!chasis.compressor.getPressureSwitchValue()) {
 			chasis.compressor.start();
-        else
-			chasis.compressor.stop();   */                      
+        } else {
+			chasis.compressor.stop();    
+        }
 	}
 
 	public void testPeriodic()

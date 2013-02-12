@@ -24,12 +24,7 @@ public interface Config
 	static final int[] CLIMBER_CHANNEL = {5, 6, 6};
 	
 	
-	static final int[] PNEUMATICS = {3, 13, 3, 8};
-	
-	/*
-	 * 
-	 */
-	static final int ULTRASONIC = 1;
+	static final int[] PNEUMATICS = {13, 8};
 	
 	/*
 	 * Digital Constants
