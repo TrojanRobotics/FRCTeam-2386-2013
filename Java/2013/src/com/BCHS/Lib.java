@@ -83,4 +83,9 @@ public class Lib
 	{
 		return (Ultrasonic.getVoltage() * 1000.0 / 9.766);
 	}
+	
+	public static double fixThrottle(double throttle)
+	{
+		return ((((throttle * -1) + 1) * 50) / 1000);
+	}
 }

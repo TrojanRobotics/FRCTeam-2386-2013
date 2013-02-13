@@ -13,12 +13,14 @@ public class Bot extends IterativeRobot
 	//Shooter shooter;
 	Chasis chasis;
 	//Retrieval retrieval;
-	//Climber climber;
+	Climber climber;
+	
 	
 	boolean joystick = true; //true = joystick, false = xbox controller
 	double x, y, y2; // x and y values for joysticks/controller
 	double Kp, Ki, Kd;
 	boolean setOnce;
+	double throttleValue;
 	
 	public void robotInit()
 	{
@@ -77,7 +79,7 @@ public class Bot extends IterativeRobot
 		if (joystick) {
 			x = mainJoystick.getX();
 			y = mainJoystick.getY();
-            y2 = secondaryJoystick.getY();
+            //y2 = secondaryJoystick.getY();
 		} else {
 			x = controller.getX(GenericHID.Hand.kLeft);
 			y = controller.getY(GenericHID.Hand.kLeft);
@@ -121,13 +123,46 @@ public class Bot extends IterativeRobot
 				chasis.driveSolenoid.set(false);
             }
             
-			if (mainJoystick.getRawButton(11)) {
+			/*if (mainJoystick.getRawButton(11)) {
 				chasis.climbSolenoid.set(true);
                 chasis.leftSide.set(Lib.limitOutput(y));
                 chasis.rightSide.set(-Lib.limitOutput(y2));
             } else {
 				chasis.climbSolenoid.set(false);
             }
+			*/
+			
+			if (joystick) {
+				throttleValue = mainJoystick.getThrottle();
+				Lib.fixThrottle(throttleValue);
+			}
+			
+			/*
+			 * this if block in unfinished 
+			 * works the left and right hockey sticks when buttons are pressed.
+			 */
+			
+			if (mainJoystick.getRawButton(8)){
+				if (secondaryJoystick.getRawButton(11)){
+					chasis.climbSolenoid.set(true);
+					chasis.rightSide.set(throttleValue);
+				} else if (secondaryJoystick.getRawButton(10)){
+					chasis.climbSolenoid.set(true);
+					chasis.rightSide.set(-throttleValue);
+				} else if (secondaryJoystick.getRawButton(6)){
+					chasis.climbSolenoid.set(true);
+					chasis.leftSide.set(throttleValue);
+				} else if (secondaryJoystick.getRawButton(7)){
+					chasis.climbSolenoid.set(true);
+					chasis.leftSide.set(-throttleValue);
+				} else {
+					chasis.climbSolenoid.set(false);
+				}
+			} else if (secondaryJoystick.getRawButton(9)){
+				
+			}
+			
+			
             /*
 			if (mainJoystick.getRawButton(9)) {
 				shooter.setTableForward();
