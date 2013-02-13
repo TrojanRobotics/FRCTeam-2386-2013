@@ -35,9 +35,16 @@ public class Climber
 		climbPID = new PIDController(Config.CLIMB_PID[0],Config.CLIMB_PID[1], Config.CLIMB_PID[2], climbEncoder, climbJaguar);	
 	}
 
-	Climber(int[] CLIMBER_CHANNEL) {
+	Climber(int[] CLIMBER_CHANNEL)
+	{
+		
 	}
 	
+	public void get()
+	{
+		climbEncoder.getRaw();
+	}
+		
 	public void setSpeed(double speed)
 	{
 		climbJaguar.set(speed);

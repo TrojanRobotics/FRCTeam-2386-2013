@@ -34,8 +34,8 @@ public interface Config
 	/*
 	 * Digital Constants
 	 */
-	static final int[] LENCODER = { 3, 4 };
-	static final int[] RENCODER = { 1, 2 };
+	static final int[] LENCODER = { 1, 2 };
+	static final int[] RENCODER = { 3, 4 };
 	static final int[] SENCODER = { 5, 6 };
 	
 	

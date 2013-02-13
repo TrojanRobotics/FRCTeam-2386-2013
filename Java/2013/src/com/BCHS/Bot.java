@@ -94,78 +94,89 @@ public class Bot extends IterativeRobot
 		chasis.leftSide.set(Lib.limitOutput(y - x));
 		chasis.rightSide.set(-Lib.limitOutput(y + x));
 		
-		if (secondaryJoystick.getTrigger())
+		if (secondaryJoystick.getTrigger()) {
 			shooter.set(1.0);
-		else if (secondaryJoystick.getRawButton(4))
+		} else if (secondaryJoystick.getRawButton(4)){
 			shooter.set(0.50);
-		else 
+		} else { 
 			shooter.set(0.0);
-        
-		if (secondaryJoystick.getRawButton(2))
+		}
+		
+		if (secondaryJoystick.getRawButton(2)) {
             retrieval.pushOut();
-        else 
+		} else { 
             retrieval.pullIn();
-        
+		}
 		
 		if (joystick)
 		{
 			
-			if (mainJoystick.getRawButton(6))
+			if (mainJoystick.getRawButton(6)) {
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
-			else
+			} else {
 				chasis.compressor.setRelayValue(Relay.Value.kOff);
+			}
 			
-			if (mainJoystick.getRawButton(10))
+			if (mainJoystick.getRawButton(10)) {
 				chasis.driveSolenoid.set(true);
-			else
+			} else {
 				chasis.driveSolenoid.set(false);
+			}
 			
-			if (mainJoystick.getRawButton(11))
+			if (mainJoystick.getRawButton(11)) {
 				chasis.climbSolenoid.set(true);
-			else
+			} else {
 				chasis.climbSolenoid.set(false);
+			}
 			
-			if (mainJoystick.getRawButton(9))
+			if (mainJoystick.getRawButton(9)) {
 				shooter.setTableForward();
-			else if (mainJoystick.getRawButton(8))
+			} else if (mainJoystick.getRawButton(8)) {
 				shooter.setTableReverse();
-			else 
+			} else {  
 				shooter.setTableNeutral();
+			}
 			
-			if (mainJoystick.getRawButton(4))
+			if (mainJoystick.getRawButton(4)) {
 				climber.setWheelyBar(true);
-			else
+			} else {
 				climber.setWheelyBar(false);
+			}	
 		}
 		else
 		{
 			
-			if (controller.getRawButton(XboxController.XboxButtons.kAButton))
+			if (controller.getRawButton(XboxController.XboxButtons.kAButton)) {
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
-			else
+			} else {
 				chasis.compressor.setRelayValue(Relay.Value.kOff);
+			}
 			
-			if (controller.getRawButton(XboxController.XboxButtons.kRBButton))
+			if (controller.getRawButton(XboxController.XboxButtons.kRBButton)) {
 				chasis.driveSolenoid.set(true);
-			else
+			} else {
 				chasis.driveSolenoid.set(false);
-			
-			if (controller.getRawButton(XboxController.XboxButtons.kLBButton))
+			}
+				
+			if (controller.getRawButton(XboxController.XboxButtons.kLBButton)) {
 				chasis.climbSolenoid.set(true);
-			else
+			} else {
 				chasis.climbSolenoid.set(false);
-			
-			if (controller.getRawButton(XboxController.XboxButtons.kBButton))
+			}
+				
+			if (controller.getRawButton(XboxController.XboxButtons.kBButton)){
 				shooter.setTableForward();
-			else if (controller.getRawButton(XboxController.XboxButtons.kXButton))
+			} else if (controller.getRawButton(XboxController.XboxButtons.kXButton)){
 				shooter.setTableReverse();
-			else 
+			} else { 
 				shooter.setTableNeutral();
+			}
 			
-			if (controller.getRawButton(XboxController.XboxButtons.kYButton))
+			if (controller.getRawButton(XboxController.XboxButtons.kYButton)) {
 				climber.setWheelyBar(true);
-			else
+			} else {
 				climber.setWheelyBar(false);
+			}	
 		}
 		
 		
