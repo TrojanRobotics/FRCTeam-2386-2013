@@ -56,10 +56,4 @@ public class Climber
 		climbJaguar.disable();
 	}
 	
-	public void setWheelyBar(boolean wheelyBar)
-	{
-		solenoid.set(wheelyBar);
-	}
-	
-	
 }

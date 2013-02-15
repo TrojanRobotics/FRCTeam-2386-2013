@@ -47,21 +47,18 @@ public class Shooter
 		ShooterPID.disable();
 	}
 	
-	public void setTableForward()
+	public void setTableForwards()
 	{
-		relay.setDirection(Relay.Direction.kForward);
-		relay.set(Relay.Value.kOn);
+		relay.set(Relay.Value.kForward);
 	}
 	
 	public void setTableReverse()
 	{
-		relay.setDirection(Relay.Direction.kReverse);
-		relay.set(Relay.Value.kOn);
+		relay.set(Relay.Value.kReverse);
 	}
 	
 	public void setTableNeutral()
 	{
 		relay.set(Relay.Value.kOff);
 	}
-			
 }
