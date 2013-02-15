@@ -36,8 +36,8 @@ public class Bot extends IterativeRobot
 		
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.LDRIVE, Config.RDRIVE);
-        retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
-		climber = new Climber(Config.CLIMBER_CHANNEL);
+        //retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
+		//climber = new Climber(Config.CLIMBER_CHANNEL);
 
 		printData();
 		

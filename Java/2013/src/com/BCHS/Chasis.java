@@ -105,14 +105,10 @@ public class Chasis
     
     public void setWheelyBar(boolean position)
     {
-        if (position) {
-            leftWheelyBar.set(true);
-            rightWheelyBar.set(true);
-        } else {
-            leftWheelyBar.set(false);
-            rightWheelyBar.set(false);
-        }
+        leftWheelyBar.set(position);
+        rightWheelyBar.set(position);
     }
+    
     public boolean getWheelyPosition()
     {
         if (leftWheelyBar.get()) {
