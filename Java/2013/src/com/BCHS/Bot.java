@@ -10,9 +10,9 @@ public class Bot extends IterativeRobot
 
 	Joystick mainJoystick, secondaryJoystick;
 	XboxController controller;
-	//Shooter shooter;
+	Shooter shooter;
 	Chasis chasis;
-	//Retrieval retrieval;
+	Retrieval retrieval;
 	Climber climber;
 	
 	
@@ -21,6 +21,7 @@ public class Bot extends IterativeRobot
 	double Kp, Ki, Kd;
 	boolean setOnce;
 	double throttleValue;
+	
 	
 	public void robotInit()
 	{
@@ -36,9 +37,8 @@ public class Bot extends IterativeRobot
         mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.LDRIVE, Config.RDRIVE);
-        //retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
-		//climber = new Climber(Config.CLIMBER_CHANNEL);
-		
+        retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
+		climber = new Climber(Config.CLIMBER_CHANNEL);
 
 		printData();
 		
@@ -79,6 +79,7 @@ public class Bot extends IterativeRobot
 		if (joystick) {
 			x = mainJoystick.getX();
 			y = mainJoystick.getY();
+			
             //y2 = secondaryJoystick.getY();
 		} else {
 			x = controller.getX(GenericHID.Hand.kLeft);
@@ -89,52 +90,101 @@ public class Bot extends IterativeRobot
 		y = Lib.signSquare(y);
         y2 = Lib.signSquare(y2);
 		
-	
-		/*
-		if (secondaryJoystick.getTrigger()) {
-			shooter.set(1.0);
-        }else if (secondaryJoystick.getRawButton(2)) {
-			shooter.set(0.50);
-        }else {
-			shooter.set(0.0);
-        }
-        
-		if (secondaryJoystick.getRawButton(3)) {
-            retrieval.pushOut();
-        } else { 
-            retrieval.pullIn();
-        }
-        */
-		
 		if (joystick) {
-            
-            
-            if (mainJoystick.getRawButton(11)) {
+          
+            if (mainJoystick.getRawButton(8)) {
                 
                 if (chasis.getMode() == Chasis.RobotMode.driveMode) {
                     chasis.changeMode(Chasis.RobotMode.climbMode);
-                } else {
-                    chasis.changeMode(Chasis.RobotMode.driveMode);
-                }
+					
+					if (secondaryJoystick.getRawButton(11)){
+						chasis.rightSide.set(throttleValue);
+					} else if (secondaryJoystick.getRawButton(10)){
+						chasis.rightSide.set(-throttleValue);
+					} else if (secondaryJoystick.getRawButton(6)){
+						chasis.leftSide.set(throttleValue);
+					} else if (secondaryJoystick.getRawButton(7)){
+						chasis.leftSide.set(-throttleValue);
+					} else {
+						chasis.leftSide.set(0.0);
+						chasis.rightSide.set(0.0);
+					}
+					
+					/*
+					 * Main driver durring climb mode
+					 */
+					if (mainJoystick.getTrigger()) {
+						shooter.set(1.0);
+					}else if (mainJoystick.getRawButton(2)) {
+						shooter.set(0.50);
+					}else {
+						shooter.set(0.0);
+					}
+        
+					if (mainJoystick.getRawButton(3)) {
+						retrieval.pushOut();
+					} else { 
+						retrieval.pullIn();
+					}
+					
+					if (throttleValue < 0.5){
+						shooter.setTableForwards();
+					} else if (throttleValue > 0.5){
+						shooter.setTableReverse();
+					} else {
+						shooter.setTableNeutral();
+					}
+					
+                } else if (chasis.getMode() == Chasis.RobotMode.driveMode){
+					chasis.changeMode(Chasis.RobotMode.driveMode);
+					
+					/*
+					 * main driver
+					 */
+					
+					if (mainJoystick.getRawButton(9)) {
+						chasis.driveSolenoid.set(true);
+						chasis.leftSide.set(Lib.limitOutput(y - x));
+						chasis.rightSide.set(-Lib.limitOutput(y + x));
+					} else {
+						chasis.driveSolenoid.set(false);
+					}
+					
+					
+					if (secondaryJoystick.getRawButton(8)) {
+						climber.setWheelyBar(true);
+					} else {
+						climber.setWheelyBar(false);
+					}
+					
+					/*
+					 * secondary driver
+					 */
+					
+					if (secondaryJoystick.getTrigger()) {
+						shooter.set(1.0);
+					}else if (secondaryJoystick.getRawButton(2)) {
+						shooter.set(0.50);
+					}else {
+						shooter.set(0.0);
+					}
+        
+					if (secondaryJoystick.getRawButton(3)) {
+						retrieval.pushOut();
+					} else { 
+						retrieval.pullIn();
+					}
+					
+					if (throttleValue < 0.5){
+						shooter.setTableForwards();
+					} else if (throttleValue > 0.5){
+						shooter.setTableReverse();
+					} else {
+						shooter.setTableNeutral();
+					}
+					
+				}
             }
-			/*
-			if (mainJoystick.getRawButton(6)) {
-				chasis.compressor.setRelayValue(Relay.Value.kOn);
-
-            } else {
-				chasis.compressor.setRelayValue(Relay.Value.kOff);
-            }
-           
-			/*
-			if (mainJoystick.getRawButton(9)) {
-				chasis.driveSolenoid.set(true);
-                chasis.leftSide.set(Lib.limitOutput(y - x));
-                chasis.rightSide.set(-Lib.limitOutput(y + x));
-            } else {
-				chasis.driveSolenoid.set(false);
-            }
-            
-			
 			
 			/*if (mainJoystick.getRawButton(11)) {
 				chasis.climbSolenoid.set(true);
@@ -159,18 +209,7 @@ public class Bot extends IterativeRobot
 			
 			if (mainJoystick.getRawButton(8)){
 				chasis.changeMode(Chasis.RobotMode.climbMode);
-				if (secondaryJoystick.getRawButton(11)){
-					chasis.rightSide.set(throttleValue);
-				} else if (secondaryJoystick.getRawButton(10)){
-					chasis.rightSide.set(-throttleValue);
-				} else if (secondaryJoystick.getRawButton(6)){
-					chasis.leftSide.set(throttleValue);
-				} else if (secondaryJoystick.getRawButton(7)){
-					chasis.leftSide.set(-throttleValue);
-				} else {
-					chasis.leftSide.set(0.0);
-					chasis.rightSide.set(0.0);
-				}
+				
 			} else if (mainJoystick.getRawButton(9)) {
 				chasis.changeMode(Chasis.RobotMode.driveMode);
 				chasis.leftSide.set(Lib.limitOutput(y - x));
@@ -188,21 +227,7 @@ public class Bot extends IterativeRobot
                     chasis.changeMode(Chasis.RobotMode.climbMode);
                 }
             }
-            /*
-			if (mainJoystick.getRawButton(4)) {
-				shooter.setTableForward();
-            } else if (mainJoystick.getRawButton(5)) {
-				shooter.setTableReverse();
-            } else {
-				shooter.setTableNeutral();
-            }
-            
-			if (secondaryJoystick.getRawButton(8)) {
-				climber.setWheelyBar(true);
-            } else {
-				climber.setWheelyBar(false);
-            }
-            */
+ 
 		} else {
 			if (controller.getRawButton(XboxController.XboxButtons.kAButton)) {
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
@@ -221,21 +246,6 @@ public class Bot extends IterativeRobot
             } else {
 				chasis.climbSolenoid.set(false);
             }
-			/*
-			if (controller.getRawButton(XboxController.XboxButtons.kBButton)) {
-				shooter.setTableForward();
-            } else if (controller.getRawButton(XboxController.XboxButtons.kXButton)) {
-				shooter.setTableReverse();
-            } else {
-				shooter.setTableNeutral();
-            }
-			
-			if (controller.getRawButton(XboxController.XboxButtons.kYButton)) {
-				climber.setWheelyBar(true);
-            } else {
-				climber.setWheelyBar(false);
-            }
-            */
 		}
 		
         if (!chasis.compressor.getPressureSwitchValue()) {
