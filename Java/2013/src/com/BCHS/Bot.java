@@ -33,7 +33,6 @@ public class Bot extends IterativeRobot
 			controller = new XboxController(Config.MADCATZ_JOYSTICK);
 		}
 		
-        mainJoystick = new Joystick(Config.MADCATZ_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1], Config.LDRIVE, Config.RDRIVE);
         //retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
@@ -75,7 +74,6 @@ public class Bot extends IterativeRobot
 	
 	public void teleopPeriodic()
 	{
-		
 		if (joystick) {
 			x = mainJoystick.getX();
 			y = mainJoystick.getY();
@@ -87,9 +85,8 @@ public class Bot extends IterativeRobot
 				
 		x = Lib.signSquare(x);
 		y = Lib.signSquare(y);
-        y2 = Lib.signSquare(y2);
+        //y2 = Lib.signSquare(y2);
 		
-	
 		/*
 		if (secondaryJoystick.getTrigger()) {
 			shooter.set(1.0);
@@ -107,24 +104,26 @@ public class Bot extends IterativeRobot
         */
 		
 		if (joystick) {
-            
-            
             if (mainJoystick.getRawButton(11)) {
-                
                 if (chasis.getMode() == Chasis.RobotMode.driveMode) {
                     chasis.changeMode(Chasis.RobotMode.climbMode);
                 } else {
                     chasis.changeMode(Chasis.RobotMode.driveMode);
                 }
             }
-			/*
-			if (mainJoystick.getRawButton(6)) {
-				chasis.compressor.setRelayValue(Relay.Value.kOn);
-
-            } else {
-				chasis.compressor.setRelayValue(Relay.Value.kOff);
+            
+            chasis.leftSide.set(Lib.limitOutput(y - x));
+            chasis.rightSide.set(-Lib.limitOutput(y + x));
+            
+            if (mainJoystick.getRawButton(8)) {
+                if (chasis.getWheelyPosition() == false) {
+                    chasis.setWheelyBar(true);
+                } else {
+                    chasis.setWheelyBar(false);
+                }
             }
-           
+			/*
+			
 			/*
 			if (mainJoystick.getRawButton(9)) {
 				chasis.driveSolenoid.set(true);
@@ -144,19 +143,17 @@ public class Bot extends IterativeRobot
 				chasis.climbSolenoid.set(false);
             }
 			*/
-			
 			if (joystick) {
 				throttleValue = mainJoystick.getThrottle();
 				Lib.fixThrottle(throttleValue);
-				System.out.println(throttleValue);
-						
+				System.out.println(throttleValue);		
 			}
 			
 			/*
 			 * this if block in unfinished 
 			 * works the left and right hockey sticks when buttons are pressed.
 			 */
-			
+			/*
 			if (mainJoystick.getRawButton(8)){
 				chasis.changeMode(Chasis.RobotMode.climbMode);
 				if (secondaryJoystick.getRawButton(11)){
@@ -176,19 +173,7 @@ public class Bot extends IterativeRobot
 				chasis.leftSide.set(Lib.limitOutput(y - x));
                 chasis.rightSide.set(-Lib.limitOutput(y + x));	
             }
-			
-            if (mainJoystick.getRawButton(8) && chasis.getMode().value == 1) {
-                chasis.changeMode(Chasis.RobotMode.climbMode);
-            } else if (mainJoystick.getRawButton(8) && chasis.getMode().value == 2) {
-                chasis.changeMode(Chasis.RobotMode.driveMode);
-            } else {
-                if (chasis.getMode().value == 1) {
-                    chasis.changeMode(Chasis.RobotMode.driveMode);
-                } else {
-                    chasis.changeMode(Chasis.RobotMode.climbMode);
-                }
-            }
-            /*
+            
 			if (mainJoystick.getRawButton(4)) {
 				shooter.setTableForward();
             } else if (mainJoystick.getRawButton(5)) {
@@ -237,19 +222,16 @@ public class Bot extends IterativeRobot
             }
             */
 		}
-		
         if (!chasis.compressor.getPressureSwitchValue()) {
 			chasis.compressor.start();
         } else {
 			chasis.compressor.stop();    
         }
 	}
-
-	public void testPeriodic()
+    public void testPeriodic()
 	{
 		
 	}
-	
 	public void printData()
 	{
 		SmartDashboard.putNumber("leftside",(chasis.leftEncoder.getRate()) * -1);
