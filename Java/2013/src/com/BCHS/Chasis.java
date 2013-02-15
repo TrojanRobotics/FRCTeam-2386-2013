@@ -5,6 +5,20 @@ import edu.wpi.first.wpilibj.*;
 
 public class Chasis 
 {
+    
+    public static class RobotMode
+    {
+        public final int value;
+        
+        public static final RobotMode driveMode = new RobotMode(1);
+        public static final RobotMode climbMode = new RobotMode(2);  
+        
+        public RobotMode(int value)
+        {
+            this.value = value;
+        }
+    }
+    
 	Bundle leftSide, rightSide;
 	Encoder leftEncoder, rightEncoder;
 	PIDController leftSidePID, rightSidePID;
@@ -68,4 +82,23 @@ public class Chasis
 		leftSidePID.setSetpoint(setpoint);
 		rightSidePID.setSetpoint(-setpoint);
 	}
+    
+    public void changeMode(RobotMode mode) //true is climb, false is drive
+    {
+        if (mode == RobotMode.climbMode) {
+            climbSolenoid.set(true);
+            driveSolenoid.set(false);
+        } else {
+            climbSolenoid.set(false);
+            driveSolenoid.set(true);
+        }
+    }
+    public RobotMode getMode()
+    {
+        if (climbSolenoid.get()) {
+            return RobotMode.climbMode;
+        } else {
+            return RobotMode.driveMode;
+        }
+    }
 }

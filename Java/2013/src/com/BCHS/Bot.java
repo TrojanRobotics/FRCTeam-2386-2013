@@ -107,6 +107,16 @@ public class Bot extends IterativeRobot
         */
 		
 		if (joystick) {
+            
+            
+            if (mainJoystick.getRawButton(11)) {
+                
+                if (chasis.getMode() == Chasis.RobotMode.driveMode) {
+                    chasis.changeMode(Chasis.RobotMode.climbMode);
+                } else {
+                    chasis.changeMode(Chasis.RobotMode.driveMode);
+                }
+            }
 			/*
 			if (mainJoystick.getRawButton(6)) {
 				chasis.compressor.setRelayValue(Relay.Value.kOn);
@@ -148,7 +158,7 @@ public class Bot extends IterativeRobot
 			 */
 			
 			if (mainJoystick.getRawButton(8)){
-				chasis.climbSolenoid.set(true);
+				chasis.changeMode(Chasis.RobotMode.climbMode);
 				if (secondaryJoystick.getRawButton(11)){
 					chasis.rightSide.set(throttleValue);
 				} else if (secondaryJoystick.getRawButton(10)){
@@ -162,14 +172,22 @@ public class Bot extends IterativeRobot
 					chasis.rightSide.set(0.0);
 				}
 			} else if (mainJoystick.getRawButton(9)) {
-				chasis.driveSolenoid.set(true);
+				chasis.changeMode(Chasis.RobotMode.driveMode);
 				chasis.leftSide.set(Lib.limitOutput(y - x));
                 chasis.rightSide.set(-Lib.limitOutput(y + x));	
-			} else {
-				chasis.climbSolenoid.set(false);
-			}
+            }
 			
-			
+            if (mainJoystick.getRawButton(8) && chasis.getMode().value == 1) {
+                chasis.changeMode(Chasis.RobotMode.climbMode);
+            } else if (mainJoystick.getRawButton(8) && chasis.getMode().value == 2) {
+                chasis.changeMode(Chasis.RobotMode.driveMode);
+            } else {
+                if (chasis.getMode().value == 1) {
+                    chasis.changeMode(Chasis.RobotMode.driveMode);
+                } else {
+                    chasis.changeMode(Chasis.RobotMode.climbMode);
+                }
+            }
             /*
 			if (mainJoystick.getRawButton(4)) {
 				shooter.setTableForward();
