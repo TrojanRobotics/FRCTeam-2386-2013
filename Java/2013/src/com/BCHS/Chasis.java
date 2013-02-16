@@ -51,6 +51,8 @@ public class Chasis
 		climbSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[1]);
         wheelyBarUp = new Solenoid(Config.SOLENOID_CHANNEL[2]);
         wheelyBarDown = new Solenoid(Config.SOLENOID_CHANNEL[3]);
+		
+		wheelyBarUp.set(true);
 	}													
 	
 	public void set(double speed)

@@ -1,27 +1,28 @@
 package com.BCHS;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Relay;
 
 public class Shooter 
 {
-	Bundle motorBundle;
+	Jaguar motorBundle;
 	Encoder encoder;
 	PIDController ShooterPID;
 	Relay relay;
 	double kp, ki, kd;
 	
-	public Shooter(int channelOne, int channelTwo, int aChannel, int bChannel)
+	public Shooter(int channelOne, int aChannel, int bChannel)
 	{
-		motorBundle = new Bundle(channelOne, channelTwo);
-		ShooterPID = new PIDController(kp, ki, kd, encoder, motorBundle);
-		encoder = new Encoder(aChannel, bChannel);
-		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
-		encoder.setDistancePerPulse(Config.SE_DPP);
+		motorBundle = new Jaguar(channelOne);
+		//ShooterPID = new PIDController(kp, ki, kd, encoder, motorBundle);
+		//encoder = new Encoder(aChannel, bChannel);
+		//encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+		//encoder.setDistancePerPulse(Config.SE_DPP);
 		relay = new Relay(Config.SHOOTER_RELAY_CHANNEL);
-		relay.setDirection(Relay.Direction.kForward);
-		encoder.start();
+		relay.setDirection(Relay.Direction.kBoth);
+		//encoder.start();
 		
 		
 		kp = 0.0;
@@ -43,7 +44,7 @@ public class Shooter
 	
 	public void stop()
 	{
-		motorBundle.stop();
+		motorBundle.stopMotor();
 		ShooterPID.disable();
 	}
 	

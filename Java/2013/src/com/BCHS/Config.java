@@ -6,9 +6,8 @@ public interface Config
 	 * GenericHID Contants
 	 */
 	
-	static final int MADCATZ_JOYSTICK = 1;
-	static final int SECONDARY_JOYSTICK = 2;
 	static final int MAIN_JOYSTICK = 1;
+	static final int SECONDARY_JOYSTICK = 2;
 	
 	static double [] CLIMB_PID = {1.0, 0.0, 0.0};
 	
@@ -30,7 +29,7 @@ public interface Config
 	/*
 	 * Digital Constants
 	 */
-	static final int[] LENCODER = { 1, 2 };
+	static final int[] LENCODER = { 5, 6 };
 	static final int[] RENCODER = { 3, 4 };
 	static final int[] SENCODER = { 5, 6 };
 	
