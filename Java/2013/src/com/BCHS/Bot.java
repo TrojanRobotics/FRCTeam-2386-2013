@@ -15,6 +15,8 @@ public class Bot extends IterativeRobot {
 	boolean setOnce, changeMode, wheelyBar;
 	double throttleValue;
 	DriverStationLCD ds;
+	Camera cam;
+	int[] RGBThreshold = {202, 255, 86, 207, 0, 255};
 
 	public void robotInit() {
 		wheelyBar = true;
@@ -26,6 +28,7 @@ public class Bot extends IterativeRobot {
 		//retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		shooter = new Shooter(2, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStationLCD.getInstance();
+		cam = new Camera();
 		
 		Kp = Config.PID[0];
 		Ki = Config.PID[1];
@@ -58,6 +61,28 @@ public class Bot extends IterativeRobot {
 			chasis.rightSidePID.setSetpoint(-12.0);
 			setOnce = true;
 		}
+		if (secondaryJoystick.getRawButton(7)) 
+		{
+			particles = cam.getLargestParticle(RGBThreshold);
+			if (particles != null && particles.length > 0) {
+					System.out.println("Amount of particles:" + orderedParticles.length);
+					System.out.println("The largest particle's center x mass:" + orderedParticles[0].center_mass_x);
+					System.out.println("The largest particle's center y mass:" + orderedParticles[0].center_mass_y);
+
+
+					Direction nextDirectionX = cam.leftOrRight(orderedParticles[0]);
+					Direction nextDirectionY = cam.upOrDown(orderedParticles[0]);
+			
+					this.centerWithCamX(nextDirectionX, 2);
+					this.centerWithCamY(nextDirectionY, 2);
+
+			} else {
+				System.out.println("There are no particles on the screen of the desired type.");
+			}
+		} 
+		else {
+			tilter.set(0);
+		}
 		printData();
 	}
 
@@ -77,13 +102,6 @@ public class Bot extends IterativeRobot {
 		 shooter.set(0.0);
 		 }*/
 
-		if (secondaryJoystick.getRawButton(7)) {
-			shooter.setTableForwards();
-		} else if (secondaryJoystick.getRawButton(6)) {
-			shooter.setTableReverse();
-		} else {
-			shooter.setTableNeutral();
-		}
 		/*
 		 if (secondaryJoystick.getRawButton(2)) {
 		 retrieval.pushOut();
@@ -197,6 +215,53 @@ public class Bot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
+	}
+
+	public void centerWithCamX(Direction direction, int mode) {
+		if (direction == Direction.right) {
+			station.println(DriverStationLCD.Line.kUser1, 1, "left  ");
+			if (mode == 1) {
+				chasis.rightSide.set(-0.3);
+				chasis.leftSide.set(0);
+			}
+
+		} else if (direction == Direction.left) {
+			station.println(DriverStationLCD.Line.kUser1, 1, "right  ");
+			if (mode == 1) {
+				chasis.leftSide.set(0.3);
+				chasis.rightSide.set(0);
+			}
+
+		} else if (direction == Direction.center) {
+			station.println(DriverStationLCD.Line.kUser1, 1, "center");
+			if (mode == 1) {
+				chasis.leftSide.set(0);
+				chasis.rightSide.set(0); 
+			}
+		} 
+		station.updateLCD();
+	}
+
+	private void centerWithCamY(Direction nextDirectionY, int mode) {
+		if (nextDirectionY == Direction.up) {
+			station.println(DriverStationLCD.Line.kUser1, 1, "up  ");
+			if (mode == 1) {
+				shooter.setTableForwards();
+			}
+
+		} else if (nextDirectionY == Direction.down) {
+			station.println(DriverStationLCD.Line.kUser1, 1, "down  ");
+			if (mode == 1) {
+				shooter.setTableReverse();
+			}
+
+		} else if (nextDirectionY == Direction.center) {
+			station.println(DriverStationLCD.Line.kUser1, 1, "center");
+			if (mode == 1) {
+				shooter.setTableNeutral();
+			}
+		} 
+		station.updateLCD();
 	}
 
 	public void printData() {
