@@ -29,8 +29,8 @@ public class Chasis
 	{
 		leftEncoder = new Encoder(leftAChannel, leftBChannel);
 		rightEncoder = new Encoder(rightAChannel, rightBChannel);
-		this.leftSide = new Bundle(6, 9);
-		this.rightSide = new Bundle(8, 7);
+		this.leftSide = new Bundle(Config.LDRIVE[0], Config.LDRIVE[1]);
+		this.rightSide = new Bundle(Config.RDRIVE[0], Config.RDRIVE[1]);
 
 		leftEncoder.setDistancePerPulse(Config.LE_DPP);
 		rightEncoder.setDistancePerPulse(Config.RE_DPP);

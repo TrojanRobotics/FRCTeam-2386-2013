@@ -25,9 +25,4 @@ public class Retrieval
 	{
 		solenoid.set(false);
 	}
-	
-    public void Limit()
-    {
-        
-    }
 }
