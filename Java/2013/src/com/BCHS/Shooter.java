@@ -19,7 +19,7 @@ public class Shooter
 		encoder = new Encoder(aChannel, bChannel);
 		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 		encoder.setDistancePerPulse(Config.SE_DPP);
-		relay = new Relay(10);
+		relay = new Relay(7);
 		relay.setDirection(Relay.Direction.kForward);
 		encoder.start();
 		
@@ -54,7 +54,7 @@ public class Shooter
 	
 	public void setTableReverse()
 	{
-		relay.set(Relay.Value.kReverse);
+		relay.set(Relay.Value.kForward);
 	}
 	
 	public void setTableNeutral()
