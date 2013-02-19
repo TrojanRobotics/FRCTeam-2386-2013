@@ -31,7 +31,7 @@ public interface Config
 	 */
 	static final int[] LENCODER = { 5, 6 };
 	static final int[] RENCODER = { 3, 4 };
-	static final int[] SENCODER = { 5, 6 };
+	static final int[] SENCODER = { 1, 2 };
 	
 	
 	static final int TLIMIT_SWITCH = 8;
@@ -47,7 +47,7 @@ public interface Config
 	/**
 	 * Value Constants
 	 */
-	static final double[] PID = { 0.1, 0.0, 0.0 };
+	static final double[] PID = { 0.05, 0.0, 0.0 };
 	static final int[] CAM_HSL = { 0, 23, 31, 142, 73, 255 };
 	static final int[] CAM_RGB = { 191, 255, 129, 229, 117, 190 };
 	
