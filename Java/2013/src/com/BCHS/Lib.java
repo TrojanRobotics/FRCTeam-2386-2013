@@ -86,6 +86,6 @@ public class Lib
 	
 	public static double fixThrottle(double throttle)
 	{
-		return ((((throttle * -1) + 1) * 50) / 1000);
+		return ((((throttle * -1) + 1) * 500) / 1000);
 	}
 }

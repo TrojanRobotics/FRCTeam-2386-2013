@@ -72,6 +72,9 @@ public class Bot extends IterativeRobot {
 			//chasis.rightSidePID.setPID(Kp, Ki, Kd);
 			chasis.setSetpoint(-24.0);
 			setOnce = true;
+			
+			//Everything under this line is my attempt at autonomous.  I don't know how to work the camera, so ya.
+			
 		}
 
 		if (secondaryJoystick.getRawButton(7)) 
@@ -110,6 +113,9 @@ public class Bot extends IterativeRobot {
 		y2 = Lib.signSquare(y2);
 		y2 = Lib.limitOutput(y2);
 		
+		throttleValue = mainJoystick.getRawAxis(3);
+		throttleValue = Lib.fixThrottle(throttleValue);
+		throttleValue = Lib.round(throttleValue, 2);
 		
 		if (secondaryJoystick.getTrigger()) {
 			shooter.set(-0.75);
@@ -134,16 +140,16 @@ public class Bot extends IterativeRobot {
 
 		if (chasis.getMode() == Chasis.RobotMode.climbMode) {
 			if (mainJoystick.getRawButton(10)) {
-				chasis.rightSide.set(0.8);
+				chasis.rightSide.set(throttleValue);
 			} else if (mainJoystick.getRawButton(11)) {
-				chasis.rightSide.set(-0.8);
+				chasis.rightSide.set(-throttleValue);
 			} else {
 				chasis.rightSide.set(0.0);
 			}
 			if (mainJoystick.getRawButton(6)) {
-				chasis.leftSide.set(0.8);
+				chasis.leftSide.set(throttleValue);
 			} else if (mainJoystick.getRawButton(7)) {
-				chasis.leftSide.set(-0.8);
+				chasis.leftSide.set(-throttleValue);
 			} else {
 				chasis.leftSide.set(0.0);
 			}
@@ -180,11 +186,6 @@ public class Bot extends IterativeRobot {
 		 }
 		 */
 
-		throttleValue = mainJoystick.getThrottle();
-		//System.out.println(throttleValue);
-		throttleValue = Lib.fixThrottle(throttleValue);
-		System.out.println(throttleValue);		
-
 
 		/*
 		 * this if block in unfinished 
@@ -215,6 +216,7 @@ public class Bot extends IterativeRobot {
 		 climber.setWheelyBar(false);
 		 }
 		 */
+
 		ds.println(DriverStationLCD.Line.kUser1, 1, String.valueOf(chasis.leftEncoder.getDistance()));
 		ds.println(DriverStationLCD.Line.kUser2, 1, String.valueOf(chasis.rightEncoder.getDistance()));
 		ds.updateLCD();
