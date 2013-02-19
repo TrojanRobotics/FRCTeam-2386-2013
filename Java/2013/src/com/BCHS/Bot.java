@@ -30,28 +30,30 @@ public class Bot extends IterativeRobot {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1]);
 		//retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
-		shooter = new Shooter(2, Config.SENCODER[0], Config.SENCODER[1]);
+		shooter = new Shooter(1, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStationLCD.getInstance();
+
 		cam = new Camera();
 		
 		Kp = Config.PID[0];
 		Ki = Config.PID[1];
 		Kd = Config.PID[2];
-		
+		System.out.println("left DPP: " + Config.LE_DPP);
+		System.out.println("right DPP: " + Config.RE_DPP);
 		printData();
 
 	}
 
 	public void disabledPeriodic() {
 		chasis.stop();
-		chasis.leftEncoder.reset();
-		chasis.rightEncoder.reset();
+		chasis.reset();
 
-		Kp = SmartDashboard.getNumber("P", Kp);
-		Ki = SmartDashboard.getNumber("I", Ki);
-		Kd = SmartDashboard.getNumber("D", Kd);
-		
-		setOnce = true;
+		//Kp = SmartDashboard.getNumber("P", Kp);
+		//Ki = SmartDashboard.getNumber("I", Ki);
+		//Kd = SmartDashboard.getNumber("D", Kd);
+
+		setOnce = false;
+		Lib.clearLCD(ds);
 	}
 
 	public void teleopinit() {
@@ -59,12 +61,19 @@ public class Bot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		if (!setOnce) {
-			chasis.leftSidePID.setPID(Kp, Ki, Kd);
-			chasis.rightSidePID.setPID(Kp, Ki, Kd);
-			chasis.leftSidePID.setSetpoint(12.0);
-			chasis.rightSidePID.setSetpoint(-12.0);
+			chasis.changeMode(Chasis.RobotMode.driveMode);
+			chasis.leftEncoder.setReverseDirection(true);
+			//chasis.leftSidePID.enable();
+			//c/hasis.leftSidePID.setSetpoint(10.0);
+			System.out.println("zomg");
+			
+			chasis.enable();
+			//chasis.leftSidePID.setPID(Kp, Ki, Kd);
+			//chasis.rightSidePID.setPID(Kp, Ki, Kd);
+			chasis.setSetpoint(-24.0);
 			setOnce = true;
 		}
+
 		if (secondaryJoystick.getRawButton(7)) 
 		{
 			ParticleAnalysisReport[] orderedParticles;
@@ -100,12 +109,13 @@ public class Bot extends IterativeRobot {
 		y = Lib.signSquare(y);
 		y2 = Lib.signSquare(y2);
 		y2 = Lib.limitOutput(y2);
-		/*
-		 if (secondaryJoystick.getTrigger()) {
-		 shooter.set(1.0);
-		 }else {
-		 shooter.set(0.0);
-		 }*/
+		
+		
+		if (secondaryJoystick.getTrigger()) {
+			shooter.set(-0.75);
+		} else {
+			shooter.set(0.0);
+		}
 
 		/*
 		 if (secondaryJoystick.getRawButton(2)) {
@@ -117,23 +127,23 @@ public class Bot extends IterativeRobot {
 		if (mainJoystick.getRawButton(9)) {
 			chasis.changeMode(Chasis.RobotMode.climbMode);
 		}
-		
+
 		if (mainJoystick.getRawButton(8)) {
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 		}
 
 		if (chasis.getMode() == Chasis.RobotMode.climbMode) {
 			if (mainJoystick.getRawButton(10)) {
-				chasis.rightSide.set(0.2);
+				chasis.rightSide.set(0.8);
 			} else if (mainJoystick.getRawButton(11)) {
-				chasis.rightSide.set(-0.2);
+				chasis.rightSide.set(-0.8);
 			} else {
 				chasis.rightSide.set(0.0);
 			}
 			if (mainJoystick.getRawButton(6)) {
-				chasis.leftSide.set(0.2);
+				chasis.leftSide.set(0.8);
 			} else if (mainJoystick.getRawButton(7)) {
-				chasis.leftSide.set(-0.2);
+				chasis.leftSide.set(-0.8);
 			} else {
 				chasis.leftSide.set(0.0);
 			}
@@ -145,8 +155,8 @@ public class Bot extends IterativeRobot {
 
 		if (secondaryJoystick.getRawButton(8)) {
 			chasis.setWheelyOn();
-		} 
-		
+		}
+
 		if (secondaryJoystick.getRawButton(9)) {
 			chasis.setWheelyOff();
 		}
@@ -172,8 +182,8 @@ public class Bot extends IterativeRobot {
 
 		throttleValue = mainJoystick.getThrottle();
 		//System.out.println(throttleValue);
-		Lib.fixThrottle(throttleValue);
-		//System.out.println(throttleValue);		
+		throttleValue = Lib.fixThrottle(throttleValue);
+		System.out.println(throttleValue);		
 
 
 		/*
@@ -208,8 +218,8 @@ public class Bot extends IterativeRobot {
 		ds.println(DriverStationLCD.Line.kUser1, 1, String.valueOf(chasis.leftEncoder.getDistance()));
 		ds.println(DriverStationLCD.Line.kUser2, 1, String.valueOf(chasis.rightEncoder.getDistance()));
 		ds.updateLCD();
-		
-		System.out.println("left side: " + chasis.leftEncoder.getDistance());
+
+
 		//System.out.println("right side: " + chasis.rightEncoder.getDistance());
 
 		if (!chasis.compressor.getPressureSwitchValue()) {

@@ -43,6 +43,7 @@ public class Chasis
 		
 		leftSidePID = new PIDController(Config.PID[0],Config.PID[1],Config.PID[2],leftEncoder, this.leftSide);
 		rightSidePID = new PIDController(Config.PID[0],Config.PID[1],Config.PID[2],rightEncoder, this.rightSide);
+		
 		leftClimbPID = new PIDController(Config.CLIMB_PID[0],Config.CLIMB_PID[1],Config.CLIMB_PID[2],leftEncoder, this.leftSide);
 		rightClimbPID = new PIDController(Config.CLIMB_PID[0],Config.CLIMB_PID[1],Config.CLIMB_PID[2],rightEncoder, this.rightSide);
 		compressor = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1]);
