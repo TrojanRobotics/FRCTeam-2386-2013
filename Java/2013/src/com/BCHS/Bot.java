@@ -177,8 +177,8 @@ public class Bot extends IterativeRobot {
 
 		throttleValue = mainJoystick.getThrottle();
 		//System.out.println(throttleValue);
-		Lib.fixThrottle(throttleValue);
-		//System.out.println(throttleValue);		
+		throttleValue = Lib.fixThrottle(throttleValue);
+		System.out.println(throttleValue);		
 
 
 		/*
