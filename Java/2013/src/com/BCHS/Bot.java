@@ -6,13 +6,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
-public class Bot extends IterativeRobot {
+public class Bot extends IterativeRobot 
+{
 
 	Joystick mainJoystick, secondaryJoystick;
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
-	double x, y, y2; // x and y values for joysticks
+	double x, y, secondaryY; // x and y values for joysticks
 	double Kp, Ki, Kd;
 	boolean setOnce, changeMode, wheelyBar;
 	double throttleValue;
@@ -22,14 +23,15 @@ public class Bot extends IterativeRobot {
 	int[] RGBThreshold = {202, 255, 86, 207, 0, 255};
 	
 
-	public void robotInit() {
+	public void robotInit() 
+	{
 		wheelyBar = true;
 		changeMode = true;
 		setOnce = false;
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1]);
-		//retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
+		retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
 		shooter = new Shooter(1, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStationLCD.getInstance();
 
@@ -44,7 +46,8 @@ public class Bot extends IterativeRobot {
 
 	}
 
-	public void disabledPeriodic() {
+	public void disabledPeriodic() 
+	{
 		chasis.stop();
 		chasis.reset();
 
@@ -56,32 +59,141 @@ public class Bot extends IterativeRobot {
 		Lib.clearLCD(ds);
 	}
 
-	public void teleopinit() {
+	public void teleopinit() 
+	{
+		
 	}
 
-	public void autonomousPeriodic() {
+	public void autonomousPeriodic() 
+	{
 		if (!setOnce) {
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
 			//chasis.leftSidePID.enable();
 			//c/hasis.leftSidePID.setSetpoint(10.0);
 			System.out.println("zomg");
-			
-			chasis.enable();
+				
 			//chasis.leftSidePID.setPID(Kp, Ki, Kd);
 			//chasis.rightSidePID.setPID(Kp, Ki, Kd);
-			chasis.setSetpoint(-24.0);
-			setOnce = true;
+			//Everything under this line is my attempt at autonomous.  I don't know how to work the camera, so ya. By: Laxman
 			
-			//Everything under this line is my attempt at autonomous.  I don't know how to work the camera, so ya.
+			//autonomous start at bottom right go up 8 feet turn left, aim and shoot
 			
+			chasis.enable();
+			chasis.setSetpoint(-96.0);
+			chasis.leftSidePID.setSetpoint(3.0);
+			chasis.rightSidePID.setSetpoint(3.0);
+			//luke was here 69
+			setOnce = true;	
+		}
+		
+		printData();
+	}
+
+	public void teleopPeriodic() 
+	{
+		
+		x = mainJoystick.getX();
+		y = mainJoystick.getY();
+		secondaryY = secondaryJoystick.getY();
+		
+		x = Lib.signSquare(x);
+		y = Lib.signSquare(y);
+		secondaryY = Lib.signSquare(secondaryY);
+
+		throttleValue = secondaryJoystick.getRawAxis(3);
+		throttleValue = Lib.fixThrottle(throttleValue);
+		throttleValue = Lib.round(throttleValue, 2);
+		
+		if (mainJoystick.getRawButton(9)) {
+			chasis.changeMode(Chasis.RobotMode.climbMode);
 		}
 
-		if (secondaryJoystick.getRawButton(7)) 
-		{
-			ParticleAnalysisReport[] orderedParticles;
-			particles = cam.getLargestParticle(RGBThreshold);
-			if (particles != null && particles.length > 0) {
+		if (mainJoystick.getRawButton(8)) {
+			chasis.changeMode(Chasis.RobotMode.driveMode);
+		}
+		
+		if (secondaryJoystick.getRawButton(9)) {
+			chasis.setWheelyOn();
+		}
+			
+		if (secondaryJoystick.getRawButton(8)) {
+			chasis.setWheelyOff();
+		}
+		
+		if (!chasis.compressor.getPressureSwitchValue()) {
+			chasis.compressor.start();
+		} else {
+			chasis.compressor.stop();
+		}
+
+		
+		if (chasis.getMode() == Chasis.RobotMode.climbMode) {
+			
+			if (secondaryJoystick.getRawButton(10)) {
+				chasis.rightSide.set(throttleValue);
+			} else if (secondaryJoystick.getRawButton(11)) {
+				chasis.rightSide.set(-throttleValue);
+			} else {
+				chasis.rightSide.set(0.0);
+			}
+	
+			if (secondaryJoystick.getRawButton(6)) {
+				chasis.leftSide.set(throttleValue);
+			} else if (secondaryJoystick.getRawButton(7)) {
+				chasis.leftSide.set(-throttleValue);
+			} else {
+				chasis.leftSide.set(0.0);
+			}
+			
+			if (mainJoystick.getRawButton(3)) {
+				retrieval.pushOut();
+			} else {
+				retrieval.pullIn();
+			}
+		
+			if (mainJoystick.getTrigger()) {
+				shooter.set(-0.75);
+			} else {
+				shooter.set(0.0);
+			}
+			
+			if (y > 0.5) {
+				shooter.setTableForwards();
+			} else if (y < -0.5) {
+				shooter.setTableReverse();
+			} else {
+				shooter.setTableNeutral();
+			}
+			
+		} else {
+			chasis.leftSide.set(Lib.limitOutput(y - x));
+			chasis.rightSide.set(-Lib.limitOutput(y + x));
+		
+			if (secondaryJoystick.getTrigger()) {
+				shooter.set(-0.75);
+			} else {
+				shooter.set(0.0);
+			}
+			
+			if (secondaryJoystick.getRawButton(2)) {
+				retrieval.pushOut();
+			} else {
+				retrieval.pullIn();
+			}
+			
+			if (secondaryY > 0.5) {
+				shooter.setTableForwards();
+			} else if (secondaryY < -0.5) {
+				shooter.setTableReverse();
+			} else {
+				shooter.setTableNeutral();
+			}
+			
+			if (secondaryJoystick.getRawButton(4)) {
+				ParticleAnalysisReport[] orderedParticles;
+				particles = cam.getLargestParticle(RGBThreshold);
+				if (particles != null && particles.length > 0) {
 					System.out.println("Amount of particles:" + particles.length);
 					System.out.println("The largest particle's center x mass:" + particles[0].center_mass_x);
 					System.out.println("The largest particle's center y mass:" + particles[0].center_mass_y);
@@ -93,148 +205,27 @@ public class Bot extends IterativeRobot {
 					this.centerWithCamX(nextDirectionX, 2);
 					this.centerWithCamY(nextDirectionY, 2);
 
-			} else {
-				System.out.println("There are no particles on the screen of the desired type.");
-			}
-		} 
-		else {
+				} else {
+					System.out.println("There are no particles on the screen of the desired type.");
+				}
+			} 
+			else {
 			shooter.setTableNeutral();
 		}
-		printData();
 	}
 
-	public void teleopPeriodic() {
-		x = mainJoystick.getX();
-		y = mainJoystick.getY();
-		y2 = secondaryJoystick.getY();
+	ds.println(DriverStationLCD.Line.kUser1, 1, String.valueOf(chasis.leftEncoder.getDistance()));
+	ds.println(DriverStationLCD.Line.kUser2, 1, String.valueOf(chasis.rightEncoder.getDistance()));
+	ds.updateLCD();	
+}
 
-		x = Lib.signSquare(x);
-		y = Lib.signSquare(y);
-		y2 = Lib.signSquare(y2);
-		y2 = Lib.limitOutput(y2);
+	public void testPeriodic() 
+	{
 		
-		throttleValue = mainJoystick.getRawAxis(3);
-		throttleValue = Lib.fixThrottle(throttleValue);
-		throttleValue = Lib.round(throttleValue, 2);
-		
-		if (secondaryJoystick.getTrigger()) {
-			shooter.set(-0.75);
-		} else {
-			shooter.set(0.0);
-		}
-
-		/*
-		 if (secondaryJoystick.getRawButton(2)) {
-		 retrieval.pushOut();
-		 } else { 
-		 retrieval.pullIn();
-		 }
-		 */
-		if (mainJoystick.getRawButton(9)) {
-			chasis.changeMode(Chasis.RobotMode.climbMode);
-		}
-
-		if (mainJoystick.getRawButton(8)) {
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-		}
-
-		if (chasis.getMode() == Chasis.RobotMode.climbMode) {
-			if (mainJoystick.getRawButton(10)) {
-				chasis.rightSide.set(throttleValue);
-			} else if (mainJoystick.getRawButton(11)) {
-				chasis.rightSide.set(-throttleValue);
-			} else {
-				chasis.rightSide.set(0.0);
-			}
-			if (mainJoystick.getRawButton(6)) {
-				chasis.leftSide.set(throttleValue);
-			} else if (mainJoystick.getRawButton(7)) {
-				chasis.leftSide.set(-throttleValue);
-			} else {
-				chasis.leftSide.set(0.0);
-			}
-		} else {
-			chasis.leftSide.set(Lib.limitOutput(y - x));
-			chasis.rightSide.set(-Lib.limitOutput(y + x));
-		}
-
-
-		if (secondaryJoystick.getRawButton(8)) {
-			chasis.setWheelyOn();
-		}
-
-		if (secondaryJoystick.getRawButton(9)) {
-			chasis.setWheelyOff();
-		}
-		/*
-			
-		 /*
-		 if (mainJoystick.getRawButton(9)) {
-		 chasis.driveSolenoid.set(true);
-		 chasis.leftSide.set(Lib.limitOutput(y - x));
-		 chasis.rightSide.set(-Lib.limitOutput(y + x));
-		 } else {
-		 chasis.driveSolenoid.set(false);
-		 }
-			
-		 /*if (mainJoystick.getRawButton(11)) {
-		 chasis.climbSolenoid.set(true);
-		 chasis.leftSide.set(Lib.limitOutput(y));
-		 chasis.rightSide.set(-Lib.limitOutput(y2));
-		 } else {
-		 chasis.climbSolenoid.set(false);
-		 }
-		 */
-
-
-		/*
-		 * this if block in unfinished 
-		 * works the left and right hockey sticks when buttons are pressed.
-		 */
-		/*
-		 if (mainJoystick.getRawButton(8)){
-		 chasis.changeMode(Chasis.RobotMode.climbMode);
-				
-		 } else if (mainJoystick.getRawButton(9)) {
-		 chasis.changeMode(Chasis.RobotMode.driveMode);
-		 chasis.leftSide.set(Lib.limitOutput(y - x));
-		 chasis.rightSide.set(-Lib.limitOutput(y + x));	
-		 }
-
-            
-		 if (mainJoystick.getRawButton(4)) {
-		 shooter.setTableForward();
-		 } else if (mainJoystick.getRawButton(5)) {
-		 shooter.setTableReverse();
-		 } else {
-		 shooter.setTableNeutral();
-		 }
-            
-		 if (secondaryJoystick.getRawButton(8)) {
-		 climber.setWheelyBar(true);
-		 } else {
-		 climber.setWheelyBar(false);
-		 }
-		 */
-
-		ds.println(DriverStationLCD.Line.kUser1, 1, String.valueOf(chasis.leftEncoder.getDistance()));
-		ds.println(DriverStationLCD.Line.kUser2, 1, String.valueOf(chasis.rightEncoder.getDistance()));
-		ds.updateLCD();
-
-
-		//System.out.println("right side: " + chasis.rightEncoder.getDistance());
-
-		if (!chasis.compressor.getPressureSwitchValue()) {
-			chasis.compressor.start();
-		} else {
-			chasis.compressor.stop();
-		}
 	}
 
-	public void testPeriodic() {
-	}
-
-	public void centerWithCamX(Direction direction, int mode) {
+	public void centerWithCamX(Direction direction, int mode) 
+	{
 		if (direction == Direction.right) {
 			ds.println(DriverStationLCD.Line.kUser1, 1, "left  ");
 			if (mode == 1) {
@@ -259,7 +250,8 @@ public class Bot extends IterativeRobot {
 		ds.updateLCD();
 	}
 
-	private void centerWithCamY(Direction nextDirectionY, int mode) {
+	private void centerWithCamY(Direction nextDirectionY, int mode) 
+	{
 		if (nextDirectionY == Direction.up) {
 			ds.println(DriverStationLCD.Line.kUser1, 1, "up  ");
 			if (mode == 1) {
@@ -280,8 +272,10 @@ public class Bot extends IterativeRobot {
 		} 
 		ds.updateLCD();
 	}
+	
 
-	public void printData() {
+	public void printData() 
+	{
 		SmartDashboard.putNumber("leftside", (chasis.leftEncoder.getRate()) * -1);
 		SmartDashboard.putNumber("rightside", chasis.rightEncoder.getRate());
 
