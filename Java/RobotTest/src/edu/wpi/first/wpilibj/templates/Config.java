@@ -1,4 +1,4 @@
-package com.BCHS;
+package edu.wpi.first.wpilibj.templates;
 
 public interface Config
 {
