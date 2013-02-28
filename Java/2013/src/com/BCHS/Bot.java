@@ -183,25 +183,14 @@ public class Bot extends IterativeRobot {
 				retrieval.pullIn();
 			}
 
-			if (secondaryY > 0.5) {
-				System.out.println("secondaryY greater " + String.valueOf(secondaryY));
-				shooter.setTableForwards();
-			} else if (secondaryY < -0.5) {
-				System.out.println("secondaryY lesser " + String.valueOf(secondaryY));
-				shooter.setTableReverse();
-			} else {
-				System.out.println("secondaryY equal " + String.valueOf(secondaryY));
-				shooter.setTableNeutral();
-			}
-/*
-			if (secondaryJoystick.getRawButton(4)) {
+			if (secondaryJoystick.getRawButton(4))  {
 				ParticleAnalysisReport[] orderedParticles;
 				particles = cam.getLargestParticle(RGBThreshold);
+				
 				if (particles != null && particles.length > 0) {
 					System.out.println("Amount of particles:" + particles.length);
 					System.out.println("The largest particle's center x mass:" + particles[0].center_mass_x);
 					System.out.println("The largest particle's center y mass:" + particles[0].center_mass_y);
-
 
 					Direction nextDirectionX = cam.leftOrRight(particles[0]);
 					Direction nextDirectionY = cam.upOrDown(particles[0]);
@@ -212,8 +201,18 @@ public class Bot extends IterativeRobot {
 				} else {
 					System.out.println("There are no particles on the screen of the desired type.");
 				}
+			} else {
+				if (secondaryY > 0.5) {
+					System.out.println("secondaryY greater " + String.valueOf(secondaryY));
+					shooter.setTableForwards();
+				} else if (secondaryY < -0.5) {
+					System.out.println("secondaryY lesser " + String.valueOf(secondaryY));
+					shooter.setTableReverse();
+				} else {
+					System.out.println("secondaryY equal " + String.valueOf(secondaryY));
+					shooter.setTableNeutral();
+				}
 			}
-			* */
 		}
 
 		ds.println(DriverStationLCD.Line.kUser1, 1, String.valueOf(chasis.leftEncoder.getDistance()));
