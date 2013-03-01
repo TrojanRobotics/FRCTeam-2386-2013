@@ -88,6 +88,30 @@ public class Bot extends IterativeRobot {
 			
 			setOnce = true;
 		}
+		
+		//TODO:
+		//GO UP FIRST
+		//THEN WHEN CENTERED
+		//FIRE THE CANNON
+		
+		ParticleAnalysisReport[] orderedParticles;
+				particles = cam.getLargestParticle(RGBThreshold);
+				
+				if (particles != null && particles.length > 0) {
+					System.out.println("Amount of particles:" + particles.length);
+					System.out.println("The largest particle's center x mass:" + particles[0].center_mass_x);
+					System.out.println("The largest particle's center y mass:" + particles[0].center_mass_y);
+
+					Direction nextDirectionX = cam.leftOrRight(particles[0]);
+					Direction nextDirectionY = cam.upOrDown(particles[0]);
+
+					this.centerWithCamX(nextDirectionX, 2);
+					this.centerWithCamY(nextDirectionY, 1);
+
+				} else {
+					shooter.setTableReverse();
+					System.out.println("Can't find the square, must go up!");
+				}
 
 		printData();
 	}
@@ -196,7 +220,7 @@ public class Bot extends IterativeRobot {
 					Direction nextDirectionY = cam.upOrDown(particles[0]);
 
 					this.centerWithCamX(nextDirectionX, 2);
-					this.centerWithCamY(nextDirectionY, 2);
+					this.centerWithCamY(nextDirectionY, 1);
 
 				} else {
 					System.out.println("There are no particles on the screen of the desired type.");
@@ -250,19 +274,19 @@ public class Bot extends IterativeRobot {
 
 	private void centerWithCamY(Direction nextDirectionY, int mode) {
 		if (nextDirectionY == Direction.up) {
-			ds.println(DriverStationLCD.Line.kUser1, 1, "up  ");
-			if (mode == 1) {
-				shooter.setTableForwards();
-			}
-
-		} else if (nextDirectionY == Direction.down) {
-			ds.println(DriverStationLCD.Line.kUser1, 1, "down  ");
+			ds.println(DriverStationLCD.Line.kUser1, 4, "up  ");
 			if (mode == 1) {
 				shooter.setTableReverse();
 			}
 
+		} else if (nextDirectionY == Direction.down) {
+			ds.println(DriverStationLCD.Line.kUser1, 4, "down  ");
+			if (mode == 1) {
+				shooter.setTableForwards();
+			}
+
 		} else if (nextDirectionY == Direction.center) {
-			ds.println(DriverStationLCD.Line.kUser1, 1, "center");
+			ds.println(DriverStationLCD.Line.kUser1, 4, "center");
 			if (mode == 1) {
 				shooter.setTableNeutral();
 			}
