@@ -58,8 +58,8 @@ public class Chasis
 	
 	public void set(double speed)
 	{
-		leftSide.set(-speed);
-		rightSide.set(speed);
+		leftSide.set(speed);
+		rightSide.set(-speed);
 	}
 	
 	public void enable()
