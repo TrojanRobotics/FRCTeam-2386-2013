@@ -22,7 +22,7 @@ public class Chasis
 	Bundle leftSide, rightSide;
 	Encoder leftEncoder, rightEncoder;
 	PIDController leftSidePID, rightSidePID, leftClimbPID, rightClimbPID;
-	Solenoid driveSolenoid, climbSolenoid, wheelyBarUp, wheelyBarDown;
+	Solenoid driveSolenoid, climbSolenoid, wheelyBarUp, wheelyBarDown, clampSolenoid;
 	Compressor compressor;
 
 	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel)
@@ -52,6 +52,7 @@ public class Chasis
 		climbSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[1]);
         wheelyBarUp = new Solenoid(Config.SOLENOID_CHANNEL[2]);
         wheelyBarDown = new Solenoid(Config.SOLENOID_CHANNEL[3]);
+		clampSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[4]);
 		
 		wheelyBarUp.set(true);
 	}													
@@ -133,6 +134,13 @@ public class Chasis
         wheelyBarUp.set(false);
         wheelyBarDown.set(true);
     }
+	public void openClamp() {
+		clampSolenoid.set(true);
+	}
+	public void closeClamp() {
+		clampSolenoid.set(false);
+	}
+	
 	public boolean getIsWheelyBarDown()
 	{
 		if (wheelyBarDown.get()) {

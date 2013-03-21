@@ -11,23 +11,18 @@ public class Shooter
 	Encoder encoder;
 	PIDController ShooterPID;
 	Relay relay;
-	double kp, ki, kd;
+	
 	
 	public Shooter(int channelOne, int aChannel, int bChannel)
 	{
 		motorBundle = new Jaguar(channelOne);
-		ShooterPID = new PIDController(kp, ki, kd, encoder, motorBundle);
 		encoder = new Encoder(aChannel, bChannel);
-		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 		encoder.setDistancePerPulse(Config.SE_DPP);
+		encoder.start();
+		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+		ShooterPID = new PIDController(Config.SHOOTER_PID[0], Config.SHOOTER_PID[1], Config.SHOOTER_PID[2], encoder, motorBundle);
 		relay = new Relay(Config.SHOOTER_RELAY_CHANNEL);
 		relay.setDirection(Relay.Direction.kBoth);
-		encoder.start();
-		
-		kp = 0.0;
-		ki = 0.0;
-		kd = 0.0;
-		
 	}
 	
 	public void setRPM(double RPM)
