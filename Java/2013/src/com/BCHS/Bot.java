@@ -355,7 +355,7 @@ public class Bot extends IterativeRobot {
 	}
 
 	private boolean centerWithCamY(Direction nextDirectionY, int mode) {
-		boolean isCentered;
+		boolean isCentered = false;
 		if (nextDirectionY == Direction.up) {
 			dsLCD.println(DriverStationLCD.Line.kUser1, 1, "up  ");
 
@@ -380,7 +380,7 @@ public class Bot extends IterativeRobot {
 			isCentered = true;
 		}
 		dsLCD.updateLCD();
-		
+		return isCentered;
 	}
 
 	public void printData() {
