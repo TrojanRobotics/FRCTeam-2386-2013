@@ -71,7 +71,7 @@ public class Bot extends IterativeRobot {
 				chasis.leftEncoder.setReverseDirection(true);
 			}
 			setOnce = true;
-			if (this.centerWithCamY(Direction.center, ROBOT_TASK_PRIORITY) == false) {
+			
 				ParticleAnalysisReport[] orderedParticles;
 				particles = cam.getLargestParticle(RGBThreshold);
 				if (particles != null && particles.length > 0) {
@@ -81,19 +81,22 @@ public class Bot extends IterativeRobot {
 
 					Direction nextDirectionY = cam.upOrDown(particles[0]);
 					this.centerWithCamY(nextDirectionY, 2);
-				
+					boolean isCentred = this.centerWithCamY(nextDirectionY, ROBOT_TASK_PRIORITY);
+					if (isCentred) {
+						shooter.set(-0.75);
+						Timer.delay(3.0);
+						for (int shots = 1;shots <= 3;shots++) {
+							retrieval.pushOut();
+							Timer.delay(1.0);
+							retrieval.pullIn();
+							Timer.delay(1.0);
+						}
+					}
 				} else {
 					System.out.println("There are no particles on the screen of the desired type.");
 				}
-			}
-			shooter.set(-0.75);
-			Timer.delay(3.0);
-			for (int shots = 1;shots <= 3;shots++) {
-				retrieval.pushOut();
-				Timer.delay(1.0);
-				retrieval.pullIn();
-				Timer.delay(1.0);
-			}
+			
+			
 			
 			
 			
