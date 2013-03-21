@@ -64,10 +64,13 @@ public class Bot extends IterativeRobot {
 
 	public void autonomousPeriodic() 
 	{
-		if (ds.getDigitalIn(1) && !setOnce) {
+		if (ds.getDigitalIn(1)) {
+			if (!setOnce) {
 			//front and centre
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
+			}
+			setOnce = true;
 			
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
@@ -90,7 +93,7 @@ public class Bot extends IterativeRobot {
 				retrieval.pullIn();
 				Timer.delay(1.0);
 			}
-			setOnce = true;
+			
 			
 		} else if (ds.getDigitalIn(2)) {
 			if (!setOnce) {
