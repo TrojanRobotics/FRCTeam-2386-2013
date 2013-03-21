@@ -66,24 +66,25 @@ public class Bot extends IterativeRobot {
 	{
 		if (ds.getDigitalIn(1)) {
 			if (!setOnce) {
-			//front and centre
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-			chasis.leftEncoder.setReverseDirection(true);
+				//front and centre
+				chasis.changeMode(Chasis.RobotMode.driveMode);
+				chasis.leftEncoder.setReverseDirection(true);
 			}
 			setOnce = true;
-			
-			ParticleAnalysisReport[] orderedParticles;
-			particles = cam.getLargestParticle(RGBThreshold);
-			if (particles != null && particles.length > 0) {
-				System.out.println("Amount of particles:" + particles.length);
-				System.out.println("The largest particle's center x mass:" + particles[0].center_mass_x);
-				System.out.println("The largest particle's center y mass:" + particles[0].center_mass_y);
+			if (this.centerWithCamY(Direction.center, ROBOT_TASK_PRIORITY) == false) {
+				ParticleAnalysisReport[] orderedParticles;
+				particles = cam.getLargestParticle(RGBThreshold);
+				if (particles != null && particles.length > 0) {
+					System.out.println("Amount of particles:" + particles.length);
+					System.out.println("The largest particle's center x mass:" + particles[0].center_mass_x);
+					System.out.println("The largest particle's center y mass:" + particles[0].center_mass_y);
 
-				Direction nextDirectionY = cam.upOrDown(particles[0]);
-				this.centerWithCamY(nextDirectionY, 2);
+					Direction nextDirectionY = cam.upOrDown(particles[0]);
+					this.centerWithCamY(nextDirectionY, 2);
 				
-			} else {
-				System.out.println("There are no particles on the screen of the desired type.");
+				} else {
+					System.out.println("There are no particles on the screen of the desired type.");
+				}
 			}
 			shooter.set(-0.75);
 			Timer.delay(3.0);
@@ -93,6 +94,7 @@ public class Bot extends IterativeRobot {
 				retrieval.pullIn();
 				Timer.delay(1.0);
 			}
+			
 			
 			
 		} else if (ds.getDigitalIn(2)) {
