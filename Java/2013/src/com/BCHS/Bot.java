@@ -92,7 +92,8 @@ public class Bot extends IterativeRobot {
 			}
 			setOnce = true;
 			
-		} else if (ds.getDigitalIn(2) && !setOnce) {
+		} else if (ds.getDigitalIn(2)) {
+			if (!setOnce) {
 			// back left
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
@@ -102,6 +103,8 @@ public class Bot extends IterativeRobot {
 			chasis.rightSide.set(1.0);
 			Timer.delay(1.0);
 			chasis.set(0.0);
+			}
+			setOnce = true;
 			
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
@@ -127,9 +130,9 @@ public class Bot extends IterativeRobot {
 				retrieval.pullIn();
 				Timer.delay(1.0);
 			}	
-			setOnce = true;
 			
-		} else if (ds.getDigitalIn(2) && !setOnce) {
+			
+		} else if (ds.getDigitalIn(3) && !setOnce) {
 			// back right
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
@@ -351,7 +354,8 @@ public class Bot extends IterativeRobot {
 		dsLCD.updateLCD();
 	}
 
-	private void centerWithCamY(Direction nextDirectionY, int mode) {
+	private boolean centerWithCamY(Direction nextDirectionY, int mode) {
+		boolean isCentered;
 		if (nextDirectionY == Direction.up) {
 			dsLCD.println(DriverStationLCD.Line.kUser1, 1, "up  ");
 
@@ -373,8 +377,10 @@ public class Bot extends IterativeRobot {
 			if (mode == 1) {
 				shooter.setTableNeutral();
 			}
+			isCentered = true;
 		}
 		dsLCD.updateLCD();
+		
 	}
 
 	public void printData() {
