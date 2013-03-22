@@ -16,7 +16,7 @@ public class Bot extends IterativeRobot {
 	Retrieval retrieval;
 	double x, y, secondaryY; // x and y values for joysticks
 	double Kp, Ki, Kd, sKp, sKi, sKd;
-	boolean setOnce, changeMode, wheelyBar, isDone;
+	boolean setOnce, changeMode, wheelyBar, isDone, shoot;
 	double throttleValue;
 	DriverStation ds;
 	DriverStationLCD dsLCD;
@@ -32,7 +32,7 @@ public class Bot extends IterativeRobot {
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		chasis = new Chasis(Config.LENCODER[0], Config.LENCODER[1], Config.RENCODER[0], Config.RENCODER[1]);
-		retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL);
+		retrieval = new Retrieval(Config.RETRIEVAL_CHANNEL[0], Config.RETRIEVAL_CHANNEL[1]);
 		shooter = new Shooter(1, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStation.getInstance();
 		dsLCD = DriverStationLCD.getInstance();
@@ -70,12 +70,6 @@ public class Bot extends IterativeRobot {
 
 	public void autonomousPeriodic() 
 	{
-		if (!chasis.compressor.getPressureSwitchValue()) {
-			chasis.compressor.start();
-		} else {
-			chasis.compressor.stop();
-		}
-		
 		if (ds.getDigitalIn(1) && !isDone) { //front and center
 			if (!setOnce) {
 				chasis.changeMode(Chasis.RobotMode.driveMode);
@@ -210,20 +204,34 @@ public class Bot extends IterativeRobot {
 			* */
 		} else if (ds.getDigitalIn(4) && !setOnce) { //dead reckoning front centre
 			
-				chasis.changeMode(Chasis.RobotMode.driveMode);
-				chasis.leftEncoder.setReverseDirection(true);
-	
-				shooter.set(-0.5);
-				//shooter.setTableReverse();
-				Timer.delay(3.0);
-				//shooter.setTableNeutral();
-				for (int shots = 1;shots <= 3;shots++) {
-					retrieval.pushOut();
-					Timer.delay(1.0);
-					retrieval.pullIn();
-					Timer.delay(1.0);
-				}
-				setOnce = true;
+			chasis.changeMode(Chasis.RobotMode.driveMode);
+			chasis.leftEncoder.setReverseDirection(true);
+			
+			shooter.set(-0.50);
+			if (!chasis.compressor.getPressureSwitchValue()) {
+				chasis.compressor.start();
+			} else {
+			chasis.compressor.stop();
+			}
+			Timer.delay(5.0);
+			
+			//shooter.setTableReverse();
+			
+			//shooter.setTableNeutral();
+			for (int shots = 1;shots <= 5;shots++) {
+				
+				retrieval.pushOut();
+				Timer.delay(0.75);
+				retrieval.pullIn();
+				Timer.delay(1.0);
+				
+				/*
+				retrieval.pushOut();
+				retrieval.pullIn();
+				Timer.delay(2.0);
+				* */
+			}
+			setOnce = true;
 				
 			
 		} else if (ds.getDigitalIn(5) && !setOnce) {  //dead reckoning back centre
@@ -352,6 +360,14 @@ public class Bot extends IterativeRobot {
 		}
 		
 		if (secondaryJoystick.getRawButton(2)) {
+			//retrieval.pushOut();
+			shoot = true;
+		} else {
+			//retrieval.pullIn();
+			shoot = false;
+		}
+		
+		if (shoot) {
 			retrieval.pushOut();
 		} else {
 			retrieval.pullIn();
