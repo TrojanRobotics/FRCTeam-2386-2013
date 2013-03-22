@@ -204,11 +204,10 @@ public class Bot extends IterativeRobot {
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
 			
+			shooter.set(-0.5);
 			shooter.setTableReverse();
 			Timer.delay(3.0);
 			shooter.setTableNeutral();
-			shooter.set(-0.75);
-			Timer.delay(3.0);
 			for (int shots = 1;shots <= 3;shots++) {
 				retrieval.pushOut();
 				Timer.delay(1.0);
@@ -315,7 +314,7 @@ public class Bot extends IterativeRobot {
 		}
 		
 		if (secondaryJoystick.getTrigger()) {
-			shooter.set(-0.75);
+			shooter.set(-0.5);
 		} else if (secondaryJoystick.getRawButton(3)) {
 			shooter.set(-1.0);
 		} else {
