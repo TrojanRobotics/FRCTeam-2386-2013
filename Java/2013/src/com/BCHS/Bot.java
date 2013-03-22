@@ -20,7 +20,7 @@ public class Bot extends IterativeRobot {
 	double throttleValue;
 	DriverStation ds;
 	DriverStationLCD dsLCD;
-	Camera cam;
+	//Camera cam;
 	ParticleAnalysisReport[] particles;
 	int[] RGBThreshold = {202, 255, 86, 207, 0, 255};
 
@@ -37,7 +37,7 @@ public class Bot extends IterativeRobot {
 		ds = DriverStation.getInstance();
 		dsLCD = DriverStationLCD.getInstance();
 
-		cam = new Camera();
+		//cam = new Camera();
 
 		Kp = Config.PID[0];
 		Ki = Config.PID[1];
@@ -70,6 +70,12 @@ public class Bot extends IterativeRobot {
 
 	public void autonomousPeriodic() 
 	{
+		if (!chasis.compressor.getPressureSwitchValue()) {
+			chasis.compressor.start();
+		} else {
+			chasis.compressor.stop();
+		}
+		
 		if (ds.getDigitalIn(1) && !isDone) { //front and center
 			if (!setOnce) {
 				chasis.changeMode(Chasis.RobotMode.driveMode);
@@ -77,7 +83,7 @@ public class Bot extends IterativeRobot {
 				//chasis.setSetpoint(-24.0);
 			}
 			setOnce = true;
-			
+				/*
 				ParticleAnalysisReport[] orderedParticles;
 				particles = cam.getLargestParticle(RGBThreshold);
 				if (particles != null && particles.length > 0) {
@@ -104,6 +110,7 @@ public class Bot extends IterativeRobot {
 				} else {
 					System.out.println("There are no particles on the screen of the desired type.");
 				}
+				* */
 			
 			
 			
@@ -121,7 +128,7 @@ public class Bot extends IterativeRobot {
 				chasis.set(0.0);
 			}
 			setOnce = true;
-			
+			/*
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
 				
@@ -154,8 +161,8 @@ public class Bot extends IterativeRobot {
 			} else {
 				System.out.println("There are no particles on the screen of the desired type.");
 			}
-			
-		} else if (ds.getDigitalIn(3) && !isDone) { //back right
+			*/
+		} else if (ds.getDigitalIn(3) && !setOnce) { //back right
 			if (!setOnce) {
 				chasis.changeMode(Chasis.RobotMode.driveMode);
 				chasis.leftEncoder.setReverseDirection(true);
@@ -167,7 +174,7 @@ public class Bot extends IterativeRobot {
 				chasis.set(0.0);
 			}
 			setOnce = true;
-			
+			/*
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
 				
@@ -200,14 +207,35 @@ public class Bot extends IterativeRobot {
 			} else {
 				System.out.println("There are no particles on the screen of the desired type.");
 			} 
-		} else if (ds.getDigitalIn(4) && !setOnce) { //dead reckoning
+			* */
+		} else if (ds.getDigitalIn(4) && !setOnce) { //dead reckoning front centre
+			
+				chasis.changeMode(Chasis.RobotMode.driveMode);
+				chasis.leftEncoder.setReverseDirection(true);
+	
+				shooter.set(-0.5);
+				//shooter.setTableReverse();
+				Timer.delay(3.0);
+				//shooter.setTableNeutral();
+				for (int shots = 1;shots <= 3;shots++) {
+					retrieval.pushOut();
+					Timer.delay(1.0);
+					retrieval.pullIn();
+					Timer.delay(1.0);
+				}
+				setOnce = true;
+				
+			
+		} else if (ds.getDigitalIn(5) && !setOnce) {  //dead reckoning back centre
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
 			
+			chasis.leftSide.set(-1.0);
+			chasis.rightSide.set(1.0);
 			shooter.set(-0.5);
-			shooter.setTableReverse();
+			//shooter.setTableReverse();
 			Timer.delay(3.0);
-			shooter.setTableNeutral();
+			//shooter.setTableNeutral();
 			for (int shots = 1;shots <= 3;shots++) {
 				retrieval.pushOut();
 				Timer.delay(1.0);
@@ -286,6 +314,7 @@ public class Bot extends IterativeRobot {
 		}
 		
 		if (secondaryJoystick.getRawButton(4))  {
+			/*
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
 				
@@ -303,6 +332,7 @@ public class Bot extends IterativeRobot {
 			} else {
 				System.out.println("There are no particles on the screen of the desired type.");
 			}
+			* */
 		} else {
 			if (secondaryJoystick.getRawButton(11)) {
 				shooter.setTableForwards();
