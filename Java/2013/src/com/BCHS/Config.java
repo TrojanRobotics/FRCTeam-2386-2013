@@ -18,8 +18,8 @@ public interface Config
 	static final int[] RDRIVE = {8, 7};
 	
 
-	static final int[] SOLENOID_CHANNEL = {3, 4, 1, 2};
-	static final int RETRIEVAL_CHANNEL = 5;
+	static final int[] SOLENOID_CHANNEL = {3, 4, 1, 2, 5, 6};
+	static final int RETRIEVAL_CHANNEL = 7;
 	
 	static final int SHOOTER_RELAY_CHANNEL = 7;
 	

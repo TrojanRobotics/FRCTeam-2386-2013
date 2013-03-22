@@ -235,6 +235,10 @@ public class Bot extends IterativeRobot {
 		
 		//MAIN JOYSTICK CONTROLS
 		
+		chasis.leftSide.set(Lib.limitOutput(y - x));
+		chasis.rightSide.set(-Lib.limitOutput(y + x));
+		
+		/*
 		if (chasis.getMode() == Chasis.RobotMode.climbMode) {
 			if (mainJoystick.getRawButton(10)) {
 				chasis.rightSide.set(throttleValue);
@@ -255,6 +259,7 @@ public class Bot extends IterativeRobot {
 			chasis.leftSide.set(Lib.limitOutput(y - x));
 			chasis.rightSide.set(-Lib.limitOutput(y + x));
 		}
+		* */
 		
 		if (mainJoystick.getRawButton(5)) {
 			chasis.openClamp();
