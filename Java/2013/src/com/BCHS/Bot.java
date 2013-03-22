@@ -200,12 +200,20 @@ public class Bot extends IterativeRobot {
 			} else {
 				System.out.println("There are no particles on the screen of the desired type.");
 			} 
-		} else if (ds.getDigitalIn(4) && !isDone) {
-			if (!setOnce) {
-				chasis.changeMode(Chasis.RobotMode.driveMode);
-				chasis.leftEncoder.setReverseDirection(true);
-				
-				chasis.setSetpoint(-3.0);
+		} else if (ds.getDigitalIn(4) && !setOnce) { //dead reckoning
+			chasis.changeMode(Chasis.RobotMode.driveMode);
+			chasis.leftEncoder.setReverseDirection(true);
+			
+			shooter.setTableReverse();
+			Timer.delay(3.0);
+			shooter.setTableNeutral();
+			shooter.set(-0.75);
+			Timer.delay(3.0);
+			for (int shots = 1;shots <= 3;shots++) {
+				retrieval.pushOut();
+				Timer.delay(1.0);
+				retrieval.pullIn();
+				Timer.delay(1.0);
 			}
 			setOnce = true;
 		}
