@@ -11,18 +11,21 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class Retrieval 
 {
-	Solenoid solenoid;
+	Solenoid openSolenoid, closeSolenoid;
 	
-	public Retrieval(int channel)
+	public Retrieval(int openChannel, int closeChannel)
 	{
-		solenoid = new Solenoid(channel);
+		openSolenoid = new Solenoid(openChannel);
+		closeSolenoid = new Solenoid(closeChannel);
 	}
 	public void pushOut()
 	{
-		solenoid.set(true);
+		openSolenoid.set(true);
+		closeSolenoid.set(false);
 	}
 	public void pullIn()
 	{
-		solenoid.set(false);
+		openSolenoid.set(false);
+		closeSolenoid.set(true);
 	}
 }

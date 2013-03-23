@@ -14,12 +14,12 @@ public interface Config
 	/*
 	 * PWM Constants
 	 */
-	static final int[] LDRIVE = {6, 9};
-	static final int[] RDRIVE = {8, 7};
+	static final int[] LDRIVE = {8, 7};
+	static final int[] RDRIVE = {6, 9};
 	
 
 	static final int[] SOLENOID_CHANNEL = {3, 4, 1, 2, 5, 6};
-	static final int RETRIEVAL_CHANNEL = 7;
+	static final int[] RETRIEVAL_CHANNEL = {7, 8};
 	
 	static final int SHOOTER_RELAY_CHANNEL = 7;
 	

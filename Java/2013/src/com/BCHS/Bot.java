@@ -213,17 +213,17 @@ public class Bot extends IterativeRobot {
 			} else {
 			chasis.compressor.stop();
 			}
-			Timer.delay(5.0);
+			Timer.delay(3.0);
 			
 			//shooter.setTableReverse();
 			
 			//shooter.setTableNeutral();
-			for (int shots = 1;shots <= 5;shots++) {
+			for (int shots = 1;shots <= 6;shots++) {
 				
 				retrieval.pushOut();
 				Timer.delay(0.75);
 				retrieval.pullIn();
-				Timer.delay(1.0);
+				Timer.delay(1.25);
 				
 				/*
 				retrieval.pushOut();
@@ -278,8 +278,11 @@ public class Bot extends IterativeRobot {
 		
 		//MAIN JOYSTICK CONTROLS
 		
-		chasis.leftSide.set(Lib.limitOutput(y - x));
-		chasis.rightSide.set(-Lib.limitOutput(y + x));
+		chasis.rightSide.set(-Lib.limitOutput(y - x));
+		chasis.leftSide.set(Lib.limitOutput(y + x));
+		
+		//chasis.leftSide.set(Lib.limitOutput(y - x));
+		//chasis.rightSide.set(-Lib.limitOutput(y + x));
 		
 		/*
 		if (chasis.getMode() == Chasis.RobotMode.climbMode) {
