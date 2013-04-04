@@ -207,7 +207,9 @@ public class Bot extends IterativeRobot {
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
 			
+			chasis.closeClamp();
 			shooter.set(-0.50);
+			
 			if (!chasis.compressor.getPressureSwitchValue()) {
 				chasis.compressor.start();
 			} else {
@@ -220,9 +222,9 @@ public class Bot extends IterativeRobot {
 			//shooter.setTableNeutral();
 			for (int shots = 1;shots <= 6;shots++) {
 				
-				retrieval.pushOut();
+				chasis.openClamp();
 				Timer.delay(0.75);
-				retrieval.pullIn();
+				chasis.closeClamp();
 				Timer.delay(1.25);
 				
 				/*
@@ -281,6 +283,25 @@ public class Bot extends IterativeRobot {
 		chasis.rightSide.set(-Lib.limitOutput(y - x));
 		chasis.leftSide.set(Lib.limitOutput(y + x));
 		
+		
+		if (mainJoystick.getRawButton(8)) {
+			chasis.setWheelyOn();
+		}
+		/*
+		if (mainJoystick.getRawButton(8)) {
+			if (chasis.getMode() == Chasis.RobotMode.climbMode) {
+				chasis.setWheelyOn();
+			} else {
+				chasis.changeMode(Chasis.RobotMode.climbMode);
+				chasis.setWheelyOn();
+			}
+		}
+		* */
+		
+		if (mainJoystick.getRawButton(9)) {
+			chasis.setWheelyOff();
+		}
+		
 		//chasis.leftSide.set(Lib.limitOutput(y - x));
 		//chasis.rightSide.set(-Lib.limitOutput(y + x));
 		
@@ -315,7 +336,7 @@ public class Bot extends IterativeRobot {
 		}
 		
 		//SECONDARY JOYSTICK CONTROLS
-		
+		/*
 		if (secondaryJoystick.getRawButton(7)) {
 			chasis.setWheelyOn();
 		}
@@ -323,7 +344,7 @@ public class Bot extends IterativeRobot {
 		if (secondaryJoystick.getRawButton(6)) {
 			chasis.setWheelyOff();
 		}
-		/*
+		
 		if (secondaryJoystick.getRawButton(4))  {
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
@@ -358,6 +379,8 @@ public class Bot extends IterativeRobot {
 			shooter.set(-0.5);
 		} else if (secondaryJoystick.getRawButton(3)) {
 			shooter.set(-1.0);
+		} else if (secondaryJoystick.getRawButton(4)) {
+			shooter.set(-0.2);
 		} else {
 			shooter.set(0.0);
 		}
@@ -371,9 +394,9 @@ public class Bot extends IterativeRobot {
 		}
 		
 		if (shoot) {
-			retrieval.pushOut();
+			chasis.openClamp();
 		} else {
-			retrieval.pullIn();
+			chasis.closeClamp();
 		}
 		
 		if (!chasis.compressor.getPressureSwitchValue()) {
