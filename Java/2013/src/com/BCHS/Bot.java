@@ -268,11 +268,11 @@ public class Bot extends IterativeRobot {
 		throttleValue = Lib.fixThrottle(throttleValue);
 		throttleValue = Lib.round(throttleValue, 2);
 		
-		if (secondaryJoystick.getRawButton(9)) {
+		if (secondaryJoystick.getRawButton(11)) {
 			chasis.changeMode(Chasis.RobotMode.climbMode);
 		}
 
-		if (secondaryJoystick.getRawButton(8)) {
+		if (secondaryJoystick.getRawButton(10)) {
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 		}
 		
@@ -323,9 +323,8 @@ public class Bot extends IterativeRobot {
 		if (secondaryJoystick.getRawButton(6)) {
 			chasis.setWheelyOff();
 		}
-		
+		/*
 		if (secondaryJoystick.getRawButton(4))  {
-			/*
 			ParticleAnalysisReport[] orderedParticles;
 			particles = cam.getLargestParticle(RGBThreshold);
 				
@@ -343,7 +342,7 @@ public class Bot extends IterativeRobot {
 			} else {
 				System.out.println("There are no particles on the screen of the desired type.");
 			}
-			* */
+			
 		} else {
 			if (secondaryJoystick.getRawButton(11)) {
 				shooter.setTableForwards();
@@ -353,6 +352,7 @@ public class Bot extends IterativeRobot {
 				shooter.setTableNeutral();
 			}
 		}
+		*/
 		
 		if (secondaryJoystick.getTrigger()) {
 			shooter.set(-0.5);
