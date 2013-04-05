@@ -63,6 +63,7 @@ public class Bot extends IterativeRobot {
 		//Kd = SmartDashboard.getNumber("D", Kd);
 
 		setOnce = false;
+		isDone = false;
 		Lib.clearLCD(dsLCD);
 	}
 
@@ -73,151 +74,44 @@ public class Bot extends IterativeRobot {
 	{
 		if (ds.getDigitalIn(1) && !setOnce) {
 			launchSpeed = -0.80;
+		} else if (ds.getDigitalIn(2) && !setOnce) {
+			
+		} else if (ds.getDigitalIn(3) && !setOnce) {
+			
 		} else if (ds.getDigitalIn(4) && !setOnce) {
 			launchSpeed = -0.65;
 		} else if (ds.getDigitalIn(5) && !setOnce) {
 			launchSpeed = -0.20;
+		} else if (ds.getDigitalIn(6) && !setOnce) {
+			
+		} else if (ds.getDigitalIn(7) && !setOnce) {
+			
+		} else if (ds.getDigitalIn(8) && !setOnce) {
+			
 		}
-		chasis.changeMode(Chasis.RobotMode.driveMode);
-		chasis.leftEncoder.setReverseDirection(true);
+		if (!isDone) {
+			chasis.changeMode(Chasis.RobotMode.driveMode);
+			chasis.leftEncoder.setReverseDirection(true);
 			
-		chasis.closeClamp();
-		shooter.set(launchSpeed);
-			
-		if (!chasis.compressor.getPressureSwitchValue()) {
-			chasis.compressor.start();
-		} else {
-			chasis.compressor.stop();
-		}
-		Timer.delay(3.0);
-			
-		for (int shots = 1;shots <= 6;shots++) {
-			chasis.openClamp();
-			Timer.delay(0.75);
 			chasis.closeClamp();
-			Timer.delay(1.25);
+			shooter.set(launchSpeed);
+			
+			if (!chasis.compressor.getPressureSwitchValue()) {
+				chasis.compressor.start();
+			} else {
+				chasis.compressor.stop();
+			}
+			Timer.delay(3.0);
+			
+			for (int shots = 1;shots <= 6;shots++) {
+				chasis.openClamp();
+				Timer.delay(0.75);
+				chasis.closeClamp();
+				Timer.delay(1.25);
+			}
+			isDone = true;
 		}
 		setOnce = true;
-		/*
-		if (ds.getDigitalIn(1) && !setOnce) { //front and center
-			
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-			chasis.leftEncoder.setReverseDirection(true);
-			
-			chasis.closeClamp();
-			shooter.set(-0.80);
-			
-			if (!chasis.compressor.getPressureSwitchValue()) {
-				chasis.compressor.start();
-			} else {
-				chasis.compressor.stop();
-			}
-			Timer.delay(3.0);
-			
-			for (int shots = 1;shots <= 6;shots++) {
-				
-				chasis.openClamp();
-				Timer.delay(0.75);
-				chasis.closeClamp();
-				Timer.delay(1.25);
-			}
-			setOnce = true;
-			
-		}else if (ds.getDigitalIn(2) && !setOnce) { //front and center
-			
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-			chasis.leftEncoder.setReverseDirection(true);
-			
-			chasis.closeClamp();
-			shooter.set(-0.70);
-			
-			if (!chasis.compressor.getPressureSwitchValue()) {
-				chasis.compressor.start();
-			} else {
-				chasis.compressor.stop();
-			}
-			Timer.delay(3.0);
-			
-			for (int shots = 1;shots <= 6;shots++) {
-				
-				chasis.openClamp();
-				Timer.delay(0.75);
-				chasis.closeClamp();
-				Timer.delay(1.25);
-			}
-			setOnce = true;
-			
-		} else if (ds.getDigitalIn(3) && !setOnce) { //back right
-			
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-			chasis.leftEncoder.setReverseDirection(true);
-			
-			chasis.closeClamp();
-			shooter.set(-0.60);
-			
-			if (!chasis.compressor.getPressureSwitchValue()) {
-				chasis.compressor.start();
-			} else {
-				chasis.compressor.stop();
-			}
-			Timer.delay(3.0);
-		
-			for (int shots = 1;shots <= 6;shots++) {		
-				chasis.openClamp();
-				Timer.delay(0.75);
-				chasis.closeClamp();
-				Timer.delay(1.25);
-			}
-			setOnce = true;
-			
-		} else if (ds.getDigitalIn(4) && !setOnce) { //dead reckoning front centre
-			
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-			chasis.leftEncoder.setReverseDirection(true);
-			
-			chasis.closeClamp();
-			shooter.set(-0.50);
-			
-			if (!chasis.compressor.getPressureSwitchValue()) {
-				chasis.compressor.start();
-			} else {
-				chasis.compressor.stop();
-			}
-			Timer.delay(3.0);
-		
-			for (int shots = 1;shots <= 6;shots++) {
-				
-				chasis.openClamp();
-				Timer.delay(0.75);
-				chasis.closeClamp();
-				Timer.delay(1.25);
-			}
-			setOnce = true;
-				
-			
-		} else if (ds.getDigitalIn(5) && !setOnce) {  //dead reckoning back centre
-			chasis.changeMode(Chasis.RobotMode.driveMode);
-			chasis.leftEncoder.setReverseDirection(true);
-			
-			chasis.closeClamp();
-			shooter.set(-0.20);
-			
-			if (!chasis.compressor.getPressureSwitchValue()) {
-				chasis.compressor.start();
-			} else {
-				chasis.compressor.stop();
-			}
-			Timer.delay(3.0);
-		
-			for (int shots = 1;shots <= 6;shots++) {	
-				chasis.openClamp();
-				Timer.delay(0.75);
-				chasis.closeClamp();
-				Timer.delay(1.25);
-			}
-			setOnce = true;
-		}
-		* */
 	}
 	
 	
