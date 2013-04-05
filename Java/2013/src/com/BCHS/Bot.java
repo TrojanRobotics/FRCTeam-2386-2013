@@ -37,6 +37,7 @@ public class Bot extends IterativeRobot {
 		shooter = new Shooter(1, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStation.getInstance();
 		dsLCD = DriverStationLCD.getInstance();
+	
 
 		//cam = new Camera();
 
@@ -72,12 +73,14 @@ public class Bot extends IterativeRobot {
 
 	public void autonomousPeriodic() 
 	{
+		System.out.println("fun fun fun");
+		if (!isDone) {
 		if (ds.getDigitalIn(1) && !setOnce) {
 			launchSpeed = -0.80;
 		} else if (ds.getDigitalIn(2) && !setOnce) {
-			
+			launchSpeed = -0.75;
 		} else if (ds.getDigitalIn(3) && !setOnce) {
-			
+			launchSpeed = -0.70;
 		} else if (ds.getDigitalIn(4) && !setOnce) {
 			launchSpeed = -0.65;
 		} else if (ds.getDigitalIn(5) && !setOnce) {
@@ -103,7 +106,7 @@ public class Bot extends IterativeRobot {
 			}
 			Timer.delay(3.0);
 			
-			for (int shots = 1;shots <= 6;shots++) {
+			for (int shots = 1;shots <= 5;shots++) {
 				chasis.openClamp();
 				Timer.delay(0.75);
 				chasis.closeClamp();
@@ -112,6 +115,8 @@ public class Bot extends IterativeRobot {
 			isDone = true;
 		}
 		setOnce = true;
+		shooter.stop();
+		}
 	}
 	
 	
