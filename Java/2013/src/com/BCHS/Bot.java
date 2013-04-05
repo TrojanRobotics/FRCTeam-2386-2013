@@ -213,7 +213,7 @@ public class Bot extends IterativeRobot {
 			if (!chasis.compressor.getPressureSwitchValue()) {
 				chasis.compressor.start();
 			} else {
-			chasis.compressor.stop();
+				chasis.compressor.stop();
 			}
 			Timer.delay(3.0);
 			
@@ -240,17 +240,21 @@ public class Bot extends IterativeRobot {
 			chasis.changeMode(Chasis.RobotMode.driveMode);
 			chasis.leftEncoder.setReverseDirection(true);
 			
-			chasis.leftSide.set(-1.0);
-			chasis.rightSide.set(1.0);
-			shooter.set(-0.5);
-			//shooter.setTableReverse();
+			chasis.closeClamp();
+			shooter.set(-0.20);
+			
+			if (!chasis.compressor.getPressureSwitchValue()) {
+				chasis.compressor.start();
+			} else {
+				chasis.compressor.stop();
+			}
 			Timer.delay(3.0);
-			//shooter.setTableNeutral();
-			for (int shots = 1;shots <= 3;shots++) {
-				retrieval.pushOut();
-				Timer.delay(1.0);
-				retrieval.pullIn();
-				Timer.delay(1.0);
+		
+			for (int shots = 1;shots <= 6;shots++) {	
+				chasis.openClamp();
+				Timer.delay(0.75);
+				chasis.closeClamp();
+				Timer.delay(1.25);
 			}
 			setOnce = true;
 		}
