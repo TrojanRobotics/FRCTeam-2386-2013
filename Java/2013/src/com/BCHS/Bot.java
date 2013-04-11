@@ -192,12 +192,6 @@ public class Bot extends IterativeRobot {
 		}
 		* */
 		
-		if (mainJoystick.getRawButton(5)) {
-			chasis.openClamp();
-		}
-		if (mainJoystick.getRawButton(4)) {
-			chasis.closeClamp();
-		}
 		
 		//SECONDARY JOYSTICK CONTROLS
 		/*
