@@ -5,6 +5,19 @@ import edu.wpi.first.wpilibj.*;
 
 public class Chasis 
 {
+	
+	public static class TilterMode
+	{
+		public final int value;
+	
+		public static final TilterMode tiltup = new TilterMode(1);
+		public static final TilterMode tiltdown = new TilterMode(2);
+		
+		public TilterMode(int value)
+		{
+			this.value = value;
+		}
+	}
     
     public static class RobotMode
     {
@@ -22,7 +35,7 @@ public class Chasis
 	Bundle leftSide, rightSide;
 	Encoder leftEncoder, rightEncoder;
 	PIDController leftSidePID, rightSidePID, leftClimbPID, rightClimbPID;
-	Solenoid driveSolenoid, climbSolenoid, wheelyBarUp, wheelyBarDown, openClampSolenoid, closeClampSolenoid;
+	Solenoid tableupSolenoid, tabledownSolenoid, wheelyBarUp, wheelyBarDown, shooterOut, shooterIn;
 	Compressor compressor;
 
 	public Chasis(int leftAChannel, int leftBChannel, int rightAChannel, int rightBChannel)
@@ -48,12 +61,12 @@ public class Chasis
 		rightClimbPID = new PIDController(Config.CLIMB_PID[0],Config.CLIMB_PID[1],Config.CLIMB_PID[2],rightEncoder, this.rightSide);
 		compressor = new Compressor(Config.PNEUMATICS[0], Config.PNEUMATICS[1]);
 		
-		driveSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[0]);
-		climbSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[1]);
+		tableupSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[0]);
+		tabledownSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[1]);
         wheelyBarUp = new Solenoid(Config.SOLENOID_CHANNEL[2]);
         wheelyBarDown = new Solenoid(Config.SOLENOID_CHANNEL[3]);
-		openClampSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[4]);
-		closeClampSolenoid = new Solenoid(Config.SOLENOID_CHANNEL[5]);
+		shooterOut = new Solenoid(Config.SOLENOID_CHANNEL[4]);
+		shooterIn = new Solenoid(Config.SOLENOID_CHANNEL[5]);
 		
 		wheelyBarUp.set(true);
 	}													
@@ -62,17 +75,6 @@ public class Chasis
 	{
 		leftSide.set(speed);
 		rightSide.set(-speed);
-	}
-	
-	public void enable()
-	{
-		if (this.getMode() == RobotMode.driveMode) {
-			leftSidePID.enable();
-			rightSidePID.enable();
-		} else {
-			leftClimbPID.enable();
-			rightClimbPID.enable();
-		}
 	}
 	
 	public void stop()
@@ -90,41 +92,23 @@ public class Chasis
 		leftEncoder.reset();
 		rightEncoder.reset();
 	}
-	
-	public void setSetpoint(double setpoint)
-	{
-		if (this.getMode() == RobotMode.driveMode) {
-			leftSidePID.setSetpoint(setpoint);
-			rightSidePID.setSetpoint(-setpoint);
-		} else {
-			leftClimbPID.setSetpoint(setpoint);
-			rightClimbPID.setSetpoint(-setpoint);
-		}
-	}
     
-    public void changeMode(RobotMode mode) //true is climb, false is drive
+    /*public void changeMode(RobotMode mode) //true is climb, false is drive
     {
         if (mode == RobotMode.climbMode) {
 			leftEncoder.setDistancePerPulse(Config.CLIMB_DPP);
 			rightEncoder.setDistancePerPulse(Config.CLIMB_DPP);
-            climbSolenoid.set(true);
-            driveSolenoid.set(false);
+            tabledownSolenoid.set(true);
+            tableupSolenoid.set(false);
         } else {
 			leftEncoder.setDistancePerPulse(Config.LE_DPP);
 			rightEncoder.setDistancePerPulse(Config.RE_DPP);
-            climbSolenoid.set(false);
-            driveSolenoid.set(true);
+            tabledownSolenoid.set(false);
+            tableupSolenoid.set(true);
         }
-    }
-    public RobotMode getMode()
-    {
-        if (climbSolenoid.get()) {
-            return RobotMode.climbMode;
-        } else {
-            return RobotMode.driveMode;
-        }
-    }
-    
+	}
+  */
+	
     public void setWheelyOn()
     {
         wheelyBarDown.set(false);
@@ -135,13 +119,13 @@ public class Chasis
         wheelyBarUp.set(false);
         wheelyBarDown.set(true);
     }
-	public void openClamp() {
-		openClampSolenoid.set(true);
-		closeClampSolenoid.set(false);
+	public void pushOut() {
+		shooterOut.set(true);
+		shooterIn.set(false);
 	}
-	public void closeClamp() {
-		openClampSolenoid.set(false);
-		closeClampSolenoid.set(true);
+	public void pullIn() {
+		shooterOut.set(false);
+		shooterIn.set(true);
 	}
 	
 	public boolean getIsWheelyBarDown()
@@ -151,5 +135,18 @@ public class Chasis
 		} else {
 			return false;
 		}
+	}
+	
+	public void setTablePosition(TilterMode position)
+	{
+		if (position == TilterMode.tiltup){
+			tableupSolenoid.set(true);
+			tabledownSolenoid.set(false);
+		} else if (position == TilterMode.tiltdown){
+			tableupSolenoid.set(false);
+			tabledownSolenoid.set(true);
+		} 
+		
+		
 	}
 }

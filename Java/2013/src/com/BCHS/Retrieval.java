@@ -18,7 +18,7 @@ public class Retrieval
 		openSolenoid = new Solenoid(openChannel);
 		closeSolenoid = new Solenoid(closeChannel);
 	}
-	public void pushOut()
+	/*public void pushOut()
 	{
 		openSolenoid.set(true);
 		closeSolenoid.set(false);
@@ -28,4 +28,5 @@ public class Retrieval
 		openSolenoid.set(false);
 		closeSolenoid.set(true);
 	}
+	*/
 }
