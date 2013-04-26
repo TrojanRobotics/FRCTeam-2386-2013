@@ -14,6 +14,7 @@ public class Bot extends IterativeRobot {
 	Shooter shooter;
 	Chasis chasis;
 	Retrieval retrieval;
+	Relay relay;
 	double x, y, secondaryY; // x and y values for joysticks
 	double launchSpeed;
 	double Kp, Ki, Kd, sKp, sKi, sKd;
@@ -37,6 +38,9 @@ public class Bot extends IterativeRobot {
 		shooter = new Shooter(1, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStation.getInstance();
 		dsLCD = DriverStationLCD.getInstance();
+		relay = new Relay(Config.LIGHTS);
+		relay.setDirection(Relay.Direction.kForward);
+		
 
 
 		//cam = new Camera();
@@ -85,6 +89,7 @@ public class Bot extends IterativeRobot {
 			} else if (ds.getDigitalIn(5) && !setOnce) {
 				launchSpeed = -0.20;
 			} else if (ds.getDigitalIn(6) && !setOnce) {
+				launchSpeed = -0.75;
 			} else if (ds.getDigitalIn(7) && !setOnce) {
 			} else if (ds.getDigitalIn(8) && !setOnce) {
 			}
@@ -102,13 +107,26 @@ public class Bot extends IterativeRobot {
 				}
 				Timer.delay(3.0);
 
-				for (int shots = 1; shots <= 5; shots++) {
+				for (int shots = 1; shots <= 4; shots++) {
 					chasis.pushOut();
-					Timer.delay(0.75);
+					Timer.delay(0.50);
 					chasis.pullIn();
-					Timer.delay(1.25);
+					Timer.delay(0.75);
+					
+					/*if (shots == 4) {  //To take out this chunk put / * infront of if and put * / (no space) below the first sqwiggly
+						chasis.set(2.0);
+						chasis.stop();
+						chasis.set(2.0);
+						
+					}*/
+					
 				}
+				
+				
 				isDone = true;
+				
+					
+				
 			}
 			setOnce = true;
 			shooter.stop();
@@ -136,6 +154,11 @@ public class Bot extends IterativeRobot {
 		if (secondaryJoystick.getRawButton(10)) {
 			chasis.setTablePosition(Chasis.TilterMode.tiltup);
 		}
+		
+		if (secondaryJoystick.getRawButton(9)) {
+			relay.set(Relay.Value.kOn);
+		} else 
+			relay.set(Relay.Value.kOff);
 
 		//MAIN JOYSTICK CONTROLS
 
@@ -230,6 +253,7 @@ public class Bot extends IterativeRobot {
 
 		if (secondaryJoystick.getTrigger()) {
 			shooter.set(-0.5);
+			
 		} else if (secondaryJoystick.getRawButton(3)) {
 			shooter.set(-1.0);
 		} else if (secondaryJoystick.getRawButton(4)) {

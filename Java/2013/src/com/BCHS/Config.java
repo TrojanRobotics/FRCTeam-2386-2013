@@ -23,6 +23,7 @@ public interface Config
 	
 	static final int SHOOTER_RELAY_CHANNEL = 7;
 	
+	
 	static final int[] PNEUMATICS = {13, 8};
 	
 	/*
