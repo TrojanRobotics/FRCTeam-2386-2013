@@ -91,9 +91,9 @@ public class Bot extends IterativeRobot {
 			} else if (ds.getDigitalIn(6) && !setOnce) {
 				launchSpeed = -0.75;
 			} else if (ds.getDigitalIn(7) && !setOnce) {
-			} else if (ds.getDigitalIn(8) && !setOnce) {
-			}
-			if (!isDone) {
+				launchSpeed = -0.75;
+				
+				if (!isDone) {
 				chasis.setTablePosition(Chasis.TilterMode.tiltup);
 				chasis.leftEncoder.setReverseDirection(true);
 
@@ -113,13 +113,28 @@ public class Bot extends IterativeRobot {
 					chasis.pullIn();
 					Timer.delay(0.75);
 					
-					/*if (shots == 4) {  //To take out this chunk put / * infront of if and put * / (no space) below the first sqwiggly
-						chasis.set(2.0);
-						chasis.stop();
-						chasis.set(2.0);
+					if (shots == 4) {  
+						chasis.rightSide.set(-0.25);
+						chasis.leftSide.set(-0.25);
+						Timer.delay(1.0);
+						chasis.rightSide.set(0.0);
+						chasis.leftSide.set(0.0);
+						Timer.delay(0.5);
+						chasis.set(-0.55);
+						Timer.delay(0.75);
+						chasis.set(0.0);
+						Timer.delay(0.5);
+						chasis.rightSide.set(-0.45);
+						chasis.leftSide.set(-0.45);
+						Timer.delay(0.5);
+						chasis.rightSide.set(0.0);
+						chasis.leftSide.set(0.0);
+						Timer.delay(0.5);
+						chasis.set(-0.5);
+						Timer.delay(0.5);
+						chasis.set(0.0);
 						
-					}*/
-					
+					}
 				}
 				
 				
@@ -128,10 +143,100 @@ public class Bot extends IterativeRobot {
 					
 				
 			}
+				
+			} else if (ds.getDigitalIn(8) && !setOnce) {
+				launchSpeed = -0.75;
+				
+				if (!isDone) {
+				chasis.setTablePosition(Chasis.TilterMode.tiltup);
+				chasis.leftEncoder.setReverseDirection(true);
+
+				chasis.pullIn();
+				shooter.set(launchSpeed);
+
+				if (!chasis.compressor.getPressureSwitchValue()) {
+					chasis.compressor.start();
+				} else {
+					chasis.compressor.stop();
+				}
+				Timer.delay(3.0);
+
+				for (int shots = 1; shots <= 4; shots++) {
+					chasis.pushOut();
+					Timer.delay(0.50);
+					chasis.pullIn();
+					Timer.delay(0.75);
+					
+					if (shots == 4) {  
+						chasis.rightSide.set(0.25);
+						chasis.leftSide.set(0.25);
+						Timer.delay(1.0);
+						chasis.rightSide.set(0.0);
+						chasis.leftSide.set(0.0);
+						Timer.delay(0.5);
+						chasis.set(0.55);
+						Timer.delay(0.75);
+						chasis.set(0.0);
+						Timer.delay(0.5);
+						chasis.rightSide.set(0.45);
+						chasis.leftSide.set(0.45);
+						Timer.delay(0.5);
+						chasis.rightSide.set(0.0);
+						chasis.leftSide.set(0.0);
+						Timer.delay(0.5);
+						chasis.set(0.5);
+						Timer.delay(0.5);
+						chasis.set(0.0);
+						
+					}
+				}
+				
+				
+				isDone = true;
+				
+					
+				
+			}
+			}
+			/*if (!isDone) {
+				chasis.setTablePosition(Chasis.TilterMode.tiltup);
+				chasis.leftEncoder.setReverseDirection(true);
+
+				chasis.pullIn();
+				shooter.set(launchSpeed);
+				if (!chasis.compressor.getPressureSwitchValue()) {
+					chasis.compressor.start();
+				} else {
+					chasis.compressor.stop();
+				}
+				Timer.delay(3.0);
+
+				for (int shots = 1; shots <= 4; shots++) {
+					chasis.pushOut();
+					Timer.delay(0.50);
+					chasis.pullIn();
+					Timer.delay(0.75);
+					
+					/*if (shots == 4) {  //To take out this chunk put / * infront of if and put * / (no space) below the first sqwiggly
+						chasis.set(2.0);
+						chasis.stop();
+						chasis.set(2.0);
+						
+					}
+					
+				}
+				
+				
+				isDone = true;
+				
+					
+				
+			}*/
 			setOnce = true;
 			shooter.stop();
 		}
 	}
+	
 
 	public void teleopPeriodic() {
 
