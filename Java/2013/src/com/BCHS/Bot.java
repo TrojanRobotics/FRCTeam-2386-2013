@@ -90,6 +90,50 @@ public class Bot extends IterativeRobot {
 				launchSpeed = -0.20;
 			} else if (ds.getDigitalIn(6) && !setOnce) {
 				launchSpeed = -0.75;
+				
+				if (!isDone) {
+				chasis.setTablePosition(Chasis.TilterMode.tiltup);
+				chasis.leftEncoder.setReverseDirection(true);
+
+				chasis.pullIn();
+				shooter.set(launchSpeed);
+
+				if (!chasis.compressor.getPressureSwitchValue()) {
+					chasis.compressor.start();
+				} else {
+					chasis.compressor.stop();
+				}
+				Timer.delay(3.0);
+
+				for (int shots = 1; shots <= 4; shots++) {
+					chasis.pushOut();
+					Timer.delay(0.50);
+					chasis.pullIn();
+					Timer.delay(0.75);
+					
+					if (shots == 4) {  
+						
+						chasis.set(-0.6);
+						Timer.delay(0.5);
+						chasis.set(0.0);
+						chasis.setWheelyOff();
+						Timer.delay(0.5);
+						chasis.rightSide.set(-0.50);
+						chasis.leftSide.set(-0.50);
+						Timer.delay(0.5);
+						chasis.rightSide.set(0.0);
+						chasis.leftSide.set(0.0);
+						
+						
+					}
+				}
+				
+				
+				isDone = true;
+				
+					
+				
+			}
 			} else if (ds.getDigitalIn(7) && !setOnce) {
 				launchSpeed = -0.75;
 				
@@ -120,17 +164,17 @@ public class Bot extends IterativeRobot {
 						chasis.rightSide.set(0.0);
 						chasis.leftSide.set(0.0);
 						Timer.delay(0.5);
-						chasis.set(-0.55);
+						chasis.set(-0.60);
 						Timer.delay(0.75);
 						chasis.set(0.0);
 						Timer.delay(0.5);
-						chasis.rightSide.set(-0.45);
-						chasis.leftSide.set(-0.45);
+						chasis.rightSide.set(-0.50);
+						chasis.leftSide.set(-0.50);
 						Timer.delay(0.5);
 						chasis.rightSide.set(0.0);
 						chasis.leftSide.set(0.0);
 						Timer.delay(0.5);
-						chasis.set(-0.5);
+						chasis.set(-1.0);
 						Timer.delay(0.5);
 						chasis.set(0.0);
 						
@@ -174,17 +218,17 @@ public class Bot extends IterativeRobot {
 						chasis.rightSide.set(0.0);
 						chasis.leftSide.set(0.0);
 						Timer.delay(0.5);
-						chasis.set(0.55);
+						chasis.set(0.60);
 						Timer.delay(0.75);
 						chasis.set(0.0);
 						Timer.delay(0.5);
-						chasis.rightSide.set(0.45);
-						chasis.leftSide.set(0.45);
+						chasis.rightSide.set(0.50);
+						chasis.leftSide.set(0.50);
 						Timer.delay(0.5);
 						chasis.rightSide.set(0.0);
 						chasis.leftSide.set(0.0);
 						Timer.delay(0.5);
-						chasis.set(0.5);
+						chasis.set(1.0);
 						Timer.delay(0.5);
 						chasis.set(0.0);
 						
