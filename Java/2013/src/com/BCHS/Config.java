@@ -39,9 +39,9 @@ public interface Config
 	static final int RLIMIT_SWITCH = 7;
 	
 	/**
-	 * Relay Constants
+	 * Jag/Vic Constants
 	 */
-	static final int LIGHTS = 1;
+	static final int LIGHTS = 2;
 	
 
 	/**

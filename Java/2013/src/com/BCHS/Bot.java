@@ -15,6 +15,8 @@ public class Bot extends IterativeRobot {
 	Chasis chasis;
 	Retrieval retrieval;
 	Relay relay;
+	Victor victor;
+	Jaguar jaguar;
 	double x, y, secondaryY; // x and y values for joysticks
 	double launchSpeed;
 	double Kp, Ki, Kd, sKp, sKi, sKd;
@@ -38,8 +40,11 @@ public class Bot extends IterativeRobot {
 		shooter = new Shooter(1, Config.SENCODER[0], Config.SENCODER[1]);
 		ds = DriverStation.getInstance();
 		dsLCD = DriverStationLCD.getInstance();
-		relay = new Relay(Config.LIGHTS);
-		relay.setDirection(Relay.Direction.kForward);
+		//relay = new Relay(Config.LIGHTS);
+		//relay.setDirection(Relay.Direction.kForward);
+		//victor = new Victor(Config.LIGHTS);
+		jaguar = new Jaguar(Config.LIGHTS);
+		
 		
 
 
@@ -113,8 +118,8 @@ public class Bot extends IterativeRobot {
 					
 					if (shots == 4) {  
 						
-						chasis.set(-0.6);
-						Timer.delay(0.5);
+						chasis.set(-1.0);
+						Timer.delay(0.75);
 						chasis.set(0.0);
 						chasis.setWheelyOff();
 						Timer.delay(0.5);
@@ -305,10 +310,17 @@ public class Bot extends IterativeRobot {
 		}
 		
 		if (secondaryJoystick.getRawButton(9)) {
-			relay.set(Relay.Value.kOn);
-		} else 
-			relay.set(Relay.Value.kOff);
-
+			jaguar.set(1.0);
+			//relay.set(Relay.Value.kOn);
+		} else {
+			jaguar.set(0.0);
+		}	
+		
+		if (secondaryJoystick.getRawButton(8)) {
+			jaguar.set(-1.0);
+		} else {
+			jaguar.set(0.0);
+		}
 		//MAIN JOYSTICK CONTROLS
 
 		chasis.rightSide.set(-Lib.limitOutput(y - x));
